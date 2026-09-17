@@ -326,3 +326,30 @@ export async function getRankingGlobal(): Promise<any[]> {
   }
   return [];
 }
+
+export async function getPartidasAnteriores(idUsuario: string): Promise<any[]>{
+  const res = await api.get(`/runTrabajo/obtenerRunTrabajo/${idUsuario}`);
+
+  const raw = res.data;
+  console.log(res);
+  const list = Array.isArray(raw)
+    ? raw
+    : raw
+      ? [raw]
+      : [];
+
+    console.log(raw)
+    return list.map((item: any, idx: number) => {
+      const userObj = typeof item.user === 'object' ? item.user: {};
+      return {
+        id: getId(item) || `rank-${idx}`,
+        username: userObj.username || item.usuario,
+        fecha: item.fecha,
+        edadActual: item.edadActual || 65,
+        dineroGenerado: typeof item.dineroGenerado === 'number' ? item.dineroGenerado : 0,
+        estado : item.estado || 'Completada'
+      };
+    });
+
+  return [];
+}

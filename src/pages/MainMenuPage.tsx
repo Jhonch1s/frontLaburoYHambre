@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { getRunActiva, crearRun } from '../services/api';
 import type { RunTrabajo } from '../types';
 import { RankingModal } from '../components/RankingModal';
+import { HistorialModal } from '../components/HistorialModal';
 
 export const MainMenuPage: React.FC = () => {
   const { user, logout } = useAuth();
@@ -12,6 +13,7 @@ export const MainMenuPage: React.FC = () => {
   const [activeRun, setActiveRun] = useState<RunTrabajo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [showRanking, setShowRanking] = useState<boolean>(false);
+  const [showHistorial, setShowHistorial] = useState<boolean>(false);
 
   useEffect(() => {
     if (user?.id) {
@@ -54,6 +56,9 @@ export const MainMenuPage: React.FC = () => {
         <div className="user-welcome">
           <span>Bienvenido, <strong>{user?.username || 'Desarrollador'}</strong></span>
         </div>
+        <button className='btn btn-secondary btn-sm' onClick={() => setShowHistorial(true)}>
+          Ver Historial
+        </button >
         <button className="btn btn-secondary btn-sm" onClick={logout}>
           Cerrar Sesión 🚪
         </button>
@@ -117,6 +122,7 @@ export const MainMenuPage: React.FC = () => {
       </main>
 
       <RankingModal isOpen={showRanking} onClose={() => setShowRanking(false)} />
+      <HistorialModal isOpen={showHistorial} onClose={() => setShowHistorial(false)} idUsuario={user?.id?.toString() ?? ''} />
     </div>
   );
 };
