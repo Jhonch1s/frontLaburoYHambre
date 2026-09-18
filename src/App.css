@@ -264,6 +264,12 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
 }
 
+.div-logo-inicio:hover{
+  transform: translateY(-4px);
+  filter: brightness(1.05);
+  transition: all 0.2s ease;
+}
+
 .menu-logo-img {
   max-height: 52px;
   width: auto;
@@ -275,12 +281,6 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0.5rem;
   filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
   display: flex;
-}
-
-.menu-logo-img-princilpal:hover{
-  cursor: pointer;
-  width: 350px;
-  transition: all 0.2s ease;
 }
 
 .user-welcome {
