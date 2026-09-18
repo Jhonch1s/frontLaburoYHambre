@@ -2,6 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { getRankingGlobal } from '../services/api';
 import type { RunTrabajo, Habilidad } from '../types';
 import { PlayerAvatar } from './PlayerAvatar';
+import {
+  graficaRanking,
+  primerPuestoSticker,
+  segundoPuestoSticker,
+  tercerPuestoSticker,
+} from '../assets';
 
 interface RankingModalProps {
   isOpen: boolean;
@@ -63,17 +69,30 @@ export const RankingModal: React.FC<RankingModalProps> = ({
 
   if (!isOpen) return null;
 
+  const modalFrameClass = esMuerto
+    ? 'muerte-frame'
+    : isJubilacion
+    ? 'jubilacion-frame'
+    : '';
+
+  const getMedalSticker = (index: number) => {
+    if (index === 0) return <img src={primerPuestoSticker} alt="1st" className="medal-sticker-img" />;
+    if (index === 1) return <img src={segundoPuestoSticker} alt="2nd" className="medal-sticker-img" />;
+    if (index === 2) return <img src={tercerPuestoSticker} alt="3rd" className="medal-sticker-img" />;
+    return `#${index + 1}`;
+  };
+
   return (
     <div className="modal-overlay">
-      <div className="modal-card ranking-modal-card">
+      <div className={`modal-card ranking-modal-card ${modalFrameClass}`}>
         <div className="ranking-header">
           {isJubilacion || esMuerto ? (
             <div className={esMuerto ? 'jubilacion-banner dead-banner' : 'jubilacion-banner'}>
-              <h2>{esMuerto ? '💀 PARTIDA FINALIZADA — PERSONAJE FALLECIDO 💀' : '🏁 PARTIDA FINALIZADA — JUBILACIÓN CUMPLIDA 🏁'}</h2>
+              <h2>{esMuerto ? 'PARTIDA FINALIZADA — PERSONAJE FALLECIDO' : 'PARTIDA FINALIZADA — JUBILACIÓN CUMPLIDA'}</h2>
               <p>{esMuerto ? 'Tu trayectoria profesional concluyó de forma abrupta antes de tiempo.' : 'Has completado tu carrera laboral con éxito a los 65 años en LaburoYHambre.'}</p>
             </div>
           ) : (
-            <h2>🏆 TABLA DE POSICIONES GLOBAL</h2>
+            <h2>TABLA DE POSICIONES GLOBAL</h2>
           )}
         </div>
 
@@ -85,7 +104,7 @@ export const RankingModal: React.FC<RankingModalProps> = ({
               </div>
 
               <div className="summary-stats-column">
-                <div className="summary-pill highlight-rank">
+                <div className="summary-pill highlight-rank-frame">
                   <span className="summary-label">Posición en el Ranking Global</span>
                   <span className="summary-value">#{playerPosition || 1}</span>
                 </div>
@@ -97,14 +116,14 @@ export const RankingModal: React.FC<RankingModalProps> = ({
 
                 <div className="summary-pill">
                   <span className="summary-label">Estado Final / Edad</span>
-                  <span className="summary-value">{finalRun.edadActual} Años ({esMuerto ? '💀 MUERTO' : '🏁 JUBILADO'})</span>
+                  <span className="summary-value">{finalRun.edadActual} Años ({esMuerto ? 'MUERTO' : 'JUBILADO'})</span>
                 </div>
               </div>
             </div>
 
             {/* HABILIDADES FINALES */}
             <div className="summary-skills-section">
-              <h4>⚡ Nivel Final de Habilidades Alcanzadas</h4>
+              <h4>Nivel Final de Habilidades Alcanzadas</h4>
               <div className="summary-skills-grid">
                 {finalHabilidades.map((hab) => (
                   <div key={hab.id || hab._id} className="summary-skill-chip">
@@ -114,10 +133,13 @@ export const RankingModal: React.FC<RankingModalProps> = ({
                 ))}
               </div>
             </div>
+
+            {/* DECORACIÓN GRÁFICA RANKING */}
+            <img src={graficaRanking} alt="Grafico Rendimiento" className="grafica-ranking-img" />
           </div>
         )}
 
-        <h3 className="leaderboard-title">📊 Clasificación General de Jugadores</h3>
+        <h3 className="leaderboard-title">Clasificación General de Jugadores</h3>
 
         {loading ? (
           <div className="modal-spinner">Cargando posiciones del servidor...</div>
@@ -134,12 +156,11 @@ export const RankingModal: React.FC<RankingModalProps> = ({
               </thead>
               <tbody>
                 {ranking.map((item, index) => {
-                  const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`;
                   return (
                     <tr key={item.id} className={index < 3 ? 'top-rank' : ''}>
-                      <td className="rank-position">{medal}</td>
+                      <td className="rank-position">{getMedalSticker(index)}</td>
                       <td className="rank-user">{item.username}</td>
-                      <td>{item.edadActual} años {item.estado === 'MUERTO' ? '💀' : ''}</td>
+                      <td>{item.edadActual} años {item.estado === 'MUERTO' ? '(Fallecido)' : ''}</td>
                       <td className="rank-money">${item.dineroGenerado.toLocaleString()}</td>
                     </tr>
                   );
@@ -158,3 +179,4 @@ export const RankingModal: React.FC<RankingModalProps> = ({
     </div>
   );
 };
+

@@ -1,4 +1,5 @@
 import React from 'react';
+import { fantasmaSticker } from '../assets';
 
 interface DeathScreenOverlayProps {
   isOpen: boolean;
@@ -16,6 +17,8 @@ export const DeathScreenOverlay: React.FC<DeathScreenOverlayProps> = ({
   return (
     <div className="dark-souls-overlay">
       <div className="dark-souls-content">
+        <img src={fantasmaSticker} alt="Fantasma Muerte" className="fantasma-sticker-img" />
+
         <div className="dark-souls-banner">
           <h1 className="you-died-title">HAS MUERTO</h1>
           <div className="dark-souls-line" />
@@ -25,9 +28,10 @@ export const DeathScreenOverlay: React.FC<DeathScreenOverlayProps> = ({
         </div>
 
         <button className="btn-dark-souls" onClick={onContinue}>
-          ⚔️ Ver Clasificación Final de Carrera
+          Ver Clasificación Final de Carrera
         </button>
       </div>
     </div>
   );
 };
+

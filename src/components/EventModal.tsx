@@ -1,5 +1,6 @@
 import React from 'react';
 import type { Evento, OpcionEvento } from '../types';
+import { eventoMuerteSticker, cincoEstrellasSticker } from '../assets';
 
 interface EventModalProps {
   evento: Evento | null;
@@ -8,6 +9,9 @@ interface EventModalProps {
 
 export const EventModal: React.FC<EventModalProps> = ({ evento, onSelectOption }) => {
   if (!evento) return null;
+
+  const isMuerte = evento.tipo === 'MUERTE';
+  const isPositivoExtremo = (evento.probabilidad && evento.probabilidad < 0.1) || (evento.titulo && evento.titulo.toLowerCase().includes('curso'));
 
   const renderEfectos = (opcion: OpcionEvento) => {
     // Si la opción posee relación con Efectos de MongoDB (EfectoOpcion / Efecto)
@@ -33,28 +37,38 @@ export const EventModal: React.FC<EventModalProps> = ({ evento, onSelectOption }
 
   return (
     <div className="modal-overlay">
-      <div className="modal-card event-modal-card">
+      <div className="modal-card event-modal-card-frame">
         <div className="event-modal-header">
-          <span className="event-badge">⚠️ EVENTO DE CARRERA</span>
-          <h2>{evento.titulo}</h2>
+          <div className='event-modal-header-container'>
+            <span className="event-badge">
+              {isMuerte ? 'EVENTO CRÍTICO' : 'EVENTO DE CARRERA'}
+            </span>
+            {isMuerte ? (
+              <img src={eventoMuerteSticker} alt="Muerte" style={{ width: 36, height: 36, objectFit: 'contain' }} />
+            ) : isPositivoExtremo ? (
+              <img src={cincoEstrellasSticker} alt="Star" style={{ width: 36, height: 36, objectFit: 'contain' }} />
+            ) : null}
+          </div>
+          <h2 className='evento-titulo'>{evento.titulo}</h2>
         </div>
         <p className="event-description">{evento.descripcion}</p>
 
         <div className="event-options-list">
-          {evento.opciones.map((opcion) => {
+          {evento.opciones.map((opcion, idx) => {
             const opcionId = opcion._id || opcion.id || '';
             const efectosText = renderEfectos(opcion);
             const dinero = opcion.impactoDinero || 0;
+            const frameClass = idx === 0 ? 'option-frame-1' : 'option-frame-2';
 
             return (
               <button
                 key={opcionId}
-                className="event-option-button"
+                className={`event-option-button ${frameClass}`}
                 onClick={() => onSelectOption(opcionId)}
               >
                 <span className="option-text">{opcion.texto}</span>
                 <div className="option-impacts">
-                  {efectosText && <span className="impact-skill">⚡ {efectosText}</span>}
+                  {efectosText && <span className="impact-skill">{efectosText}</span>}
                   {dinero !== 0 && (
                     <span className="impact-money">
                       {dinero > 0 ? `+$${dinero.toLocaleString()}` : `-$${Math.abs(dinero).toLocaleString()}`}
@@ -69,3 +83,4 @@ export const EventModal: React.FC<EventModalProps> = ({ evento, onSelectOption }
     </div>
   );
 };
+

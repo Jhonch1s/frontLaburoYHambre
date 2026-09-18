@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { logoLaburoYHambre } from '../assets';
 
 export const AuthPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login');
@@ -46,9 +47,10 @@ export const AuthPage: React.FC = () => {
     <div className="auth-container">
       <div className="auth-card">
         <div className="auth-header">
-          <h1 className="brand-title">💼 LaburoYHambre</h1>
-          <p className="brand-subtitle">Simulador de Carrera Tech & Supervivencia</p>
+          <img src={logoLaburoYHambre} alt="LaburoYHambre" className="auth-logo-img" />
+          <p className="brand-subtitle"><strong>Simulador de Carrera y Supervivencia</strong></p>
         </div>
+
 
         <div className="auth-tabs">
           <button

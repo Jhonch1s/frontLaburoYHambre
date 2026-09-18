@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   getRunActiva,
@@ -9,16 +9,33 @@ import {
   evaluarEvento,
   tomarDecision,
   getId,
+  getDetalleRun,
 } from '../services/api';
 import type { RunTrabajo, Habilidad, Evento, HistorialAño } from '../types';
 import { PlayerAvatar } from '../components/PlayerAvatar';
 import { EventModal } from '../components/EventModal';
 import { RankingModal } from '../components/RankingModal';
 import { DeathScreenOverlay } from '../components/DeathScreenOverlay';
+import {
+  logoLaburoYHambre,
+  botonSiguienteAno,
+  flechaIcon,
+  backendSticker,
+  frontendSticker,
+  inglesSticker,
+  cloudInfraSticker,
+  liderazgoSticker,
+  googleSticker,
+  mercadoLibreSticker,
+  globantSticker,
+  startupSticker,
+  despidoSticker,
+} from '../assets';
 
 export const GamePage: React.FC = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [run, setRun] = useState<RunTrabajo | null>(null);
   const [habilidades, setHabilidades] = useState<Habilidad[]>([]);
@@ -37,30 +54,83 @@ export const GamePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
-  // Inicializar o cargar run activa
+  // Helper sticker para cada habilidad
+  const getSkillSticker = (name: string) => {
+    const lower = name.toLowerCase();
+    if (lower.includes('back')) return backendSticker;
+    if (lower.includes('front')) return frontendSticker;
+    if (lower.includes('ingl') || lower.includes('english')) return inglesSticker;
+    if (lower.includes('cloud') || lower.includes('infra') || lower.includes('devops')) return cloudInfraSticker;
+    if (lower.includes('lid') || lower.includes('gest') || lower.includes('lead')) return liderazgoSticker;
+    return backendSticker;
+  };
+
+  // Helper sticker para empresas
+  const getCompanySticker = (empresaName?: string) => {
+    if (!empresaName) return despidoSticker;
+    const lower = empresaName.toLowerCase();
+    if (lower.includes('google')) return googleSticker;
+    if (lower.includes('mercado') || lower.includes('libre')) return mercadoLibreSticker;
+    if (lower.includes('globant')) return globantSticker;
+    return startupSticker;
+  };
+
+  // Inicializar o cargar la partida correspondiente (desde state o del backend)
   useEffect(() => {
     if (!user?.id) return;
     setLoading(true);
 
-    getRunActiva(user.id)
-      .then(async (activeRun) => {
-        let current = activeRun;
-        if (!current || current.estado === 'FINALIZADA' || current.estado === 'Completada' || current.estado === 'MUERTO') {
-          current = await crearRun(user.id || '', 1);
-        }
-        setRun(current);
+    const targetRun = location.state?.targetRun as RunTrabajo | undefined;
+    const isNew = location.state?.isNew as boolean | undefined;
 
-        const runId = getId(current);
-        if (runId) {
-          const habs = await getHabilidades(runId);
-          setHabilidades([...habs]);
-        }
+    if (targetRun && getId(targetRun) && !isNew) {
+      setRun(targetRun);
+      const runId = getId(targetRun);
+      getHabilidades(runId).then((habs) => setHabilidades([...habs]));
+      rebuildHistorial(targetRun);
+      if (targetRun.edadActual >= 65 || targetRun.estado === 'Completada' || targetRun.estado === 'FINALIZADA') {
+        setShowJubilacionModal(true);
+      }
+      setLoading(false);
+    } else {
+      getRunActiva(user.id)
+        .then(async (activeRun) => {
+          let current = activeRun;
+          if (!current || current.estado === 'FINALIZADA' || current.estado === 'Completada' || current.estado === 'MUERTO') {
+            const allRuns = await getDetalleRun(user.id || '');
+            const lastRun = allRuns[0];
+            if (lastRun && (lastRun.edadActual >= 65 || lastRun.estado === 'Completada' || lastRun.estado === 'FINALIZADA') && !isNew) {
+              setRun(lastRun);
+              const runId = getId(lastRun);
+              if (runId) {
+                const habs = await getHabilidades(runId);
+                setHabilidades([...habs]);
+              }
+              rebuildHistorial(lastRun);
+              setShowJubilacionModal(true);
+              setLoading(false);
+              return;
+            }
 
-        rebuildHistorial(current);
-      })
-      .catch((err) => console.error('Error al inicializar la partida:', err))
-      .finally(() => setLoading(false));
-  }, [user]);
+            current = await crearRun(user.id || '', 1);
+          }
+          setRun(current);
+
+          const runId = getId(current);
+          if (runId) {
+            const habs = await getHabilidades(runId);
+            setHabilidades([...habs]);
+          }
+
+          rebuildHistorial(current);
+          if (current && (current.edadActual >= 65 || current.estado === 'Completada' || current.estado === 'FINALIZADA')) {
+            setShowJubilacionModal(true);
+          }
+        })
+        .catch((err) => console.error('Error al inicializar la partida:', err))
+        .finally(() => setLoading(false));
+    }
+  }, [user, location.state]);
 
   const rebuildHistorial = (currentRun: RunTrabajo) => {
     if (!currentRun) return;
@@ -76,20 +146,20 @@ export const GamePage: React.FC = () => {
       }));
     } else {
       const minEdad = 18;
-      const targetEdad = Math.min(currentRun.edadActual, 65);
+      const targetEdad = Math.min(currentRun.edadActual || 18, 65);
       let accumDinero = 0;
       const baseSalario = currentRun.salarioActual || (currentRun.trabajoActual ? currentRun.trabajoActual.salarioAnual || 10000 : 0);
 
       for (let age = minEdad; age <= targetEdad; age++) {
-        if (age === currentRun.edadActual) {
-          accumDinero = currentRun.dineroGenerado;
+        if (age === (currentRun.edadActual || 18)) {
+          accumDinero = currentRun.dineroGenerado || 0;
         } else {
           accumDinero += Math.round(baseSalario);
         }
 
         let puestoEmpresa = currentRun.trabajoActual
           ? `${currentRun.trabajoActual.puesto} @ ${currentRun.trabajoActual.empresa}`
-          : '🚨 DESPEDIDO / En búsqueda laboral';
+          : 'DESPEDIDO / En búsqueda laboral';
 
         items.push({
           edad: age,
@@ -102,14 +172,22 @@ export const GamePage: React.FC = () => {
 
     setHistorial(items);
 
-    // Paginación automática: Salto automático a la última página si supera los 10 registros
+    // Paginación automática: Salto a la última página si supera los 10 registros
     const newTotalPages = Math.max(1, Math.ceil(items.length / itemsPerPage));
     setCurrentPage(newTotalPages);
   };
 
   const handleAvanzarAño = async () => {
     if (!user?.id || !run || advancing) return;
-    if (run.edadActual >= 65 || run.estado === 'Completada' || run.estado === 'MUERTO') {
+
+    const currentAge = Number(run.edadActual || 18);
+    const isAlreadyFinished =
+      currentAge >= 65 ||
+      run.estado?.toLowerCase() === 'completada' ||
+      run.estado?.toLowerCase() === 'finalizada' ||
+      run.estado === 'MUERTO';
+
+    if (isAlreadyFinished) {
       setShowJubilacionModal(true);
       return;
     }
@@ -119,20 +197,31 @@ export const GamePage: React.FC = () => {
     try {
       const runId = getId(run);
       const updatedRun = await aumentarAño(user.id, runId);
-      setRun(updatedRun);
+      const newAge = Math.max(currentAge + 1, Number(updatedRun.edadActual || currentAge + 1));
+      const isRetirement =
+        newAge >= 65 ||
+        updatedRun.estado?.toLowerCase() === 'completada' ||
+        updatedRun.estado?.toLowerCase() === 'finalizada';
 
-      const updatedRunId = getId(updatedRun);
-      const updatedHabs = await getHabilidades(updatedRunId);
-      setHabilidades([...updatedHabs]);
-
-      rebuildHistorial(updatedRun);
-
-      // Verificar fin de carrera por jubilación o estado completado
-      if (updatedRun.edadActual >= 65 || updatedRun.estado === 'Completada') {
+      if (isRetirement) {
+        const completedRun: RunTrabajo = {
+          ...updatedRun,
+          edadActual: 65,
+          estado: 'Completada',
+        };
+        setRun(completedRun);
+        rebuildHistorial(completedRun);
+        setCurrentEvento(null);
         setShowJubilacionModal(true);
         setAdvancing(false);
         return;
       }
+
+      setRun(updatedRun);
+      const updatedRunId = getId(updatedRun);
+      const updatedHabs = await getHabilidades(updatedRunId);
+      setHabilidades([...updatedHabs]);
+      rebuildHistorial(updatedRun);
 
       // Evaluar eventos
       const evento = await evaluarEvento(updatedRunId, updatedRun);
@@ -163,7 +252,11 @@ export const GamePage: React.FC = () => {
         if (isMuerteEvent || result.runActualizada.estado === 'MUERTO') {
           setDeathCause(eventDesc || 'Sobredosis de energizantes en el deploy o impacto de rayo en el teclado.');
           setShowDeathOverlay(true);
-        } else if (result.runActualizada.estado === 'Completada' || result.runActualizada.edadActual >= 65) {
+        } else if (
+          result.runActualizada.estado?.toLowerCase() === 'completada' ||
+          result.runActualizada.estado?.toLowerCase() === 'finalizada' ||
+          Number(result.runActualizada.edadActual || 0) >= 65
+        ) {
           setShowJubilacionModal(true);
         }
       }
@@ -189,37 +282,43 @@ export const GamePage: React.FC = () => {
   const totalPages = Math.max(1, Math.ceil(historial.length / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentHistorialPage = historial.slice(startIndex, startIndex + itemsPerPage);
+  const currentCompanySticker = getCompanySticker(run.trabajoActual?.empresa);
+  const isFinishedRun =
+    Number(run.edadActual || 18) >= 65 ||
+    run.estado?.toLowerCase() === 'completada' ||
+    run.estado?.toLowerCase() === 'finalizada' ||
+    run.estado === 'MUERTO';
 
   return (
     <div className="game-container">
-      {/* HUD SUPERIOR */}
+      {/* HUD SUPERIOR CON MARCO HORIZONTAL */}
       <header className="game-hud">
         <div className="hud-brand">
-          <button className="btn btn-icon" onClick={() => navigate('/menu')}>
-            ⬅ Menú
+          <button className="btn-menu-hud" onClick={() => navigate('/menu')}>
+            Menú
           </button>
-          <h2>LaburoYHambre</h2>
+          <img src={logoLaburoYHambre} alt="LaburoYHambre" className="hud-logo-img" />
         </div>
 
-        <div className="hud-metrics">
+        <div className="hud-metrics-frame">
           <div className="hud-pill">
             <span className="hud-label">Usuario</span>
             <span className="hud-value">{user?.username || 'Estudiante Tecnólogo'}</span>
           </div>
 
-          <div className="hud-pill highlight-pill">
+          <div className="hud-pill">
             <span className="hud-label">Dinero Acumulado</span>
-            <span className="hud-value">${run.dineroGenerado.toLocaleString()}</span>
+            <span className="hud-value" style={{ color: '#10b981' }}>${(run.dineroGenerado || 0).toLocaleString()}</span>
           </div>
 
           <div className="hud-pill">
             <span className="hud-label">Edad / Año</span>
-            <span className="hud-value">{run.edadActual} años ({run.añoActual || run.anioActual || 2027})</span>
+            <span className="hud-value">{run.edadActual || 18} años ({run.añoActual || run.anioActual || 2027})</span>
           </div>
 
           <div className="hud-pill">
             <span className="hud-label">Trabajo Actual</span>
-            <span className="hud-value">{run.trabajoActual ? run.trabajoActual.puesto : '🚨 DESPEDIDO / Sin empleo'}</span>
+            <span className="hud-value">{run.trabajoActual ? run.trabajoActual.puesto : 'DESPEDIDO / Sin empleo'}</span>
           </div>
         </div>
       </header>
@@ -229,22 +328,25 @@ export const GamePage: React.FC = () => {
         {/* COLUMNA IZQUIERDA: PANEL DE CONTROL */}
         <aside className="game-left-column">
           {/* Avatar Dinámico */}
-          <PlayerAvatar edadActual={run.edadActual} dineroGenerado={run.dineroGenerado} />
+          <PlayerAvatar edadActual={run.edadActual || 18} dineroGenerado={run.dineroGenerado || 0} />
 
-          {/* Tarjeta Trabajo Actual */}
-          <div className="card job-card">
-            <h3>🏢 Estado Laboral & Empresa</h3>
+          {/* Tarjeta Trabajo Actual con Marco Simple y Sticker de Empresa */}
+          <div className="job-card-frame">
+            <div className="job-card-header">
+              <h3>Estado Laboral y Empresa</h3>
+              <img src={currentCompanySticker} alt="Empresa Sticker" className="company-sticker-img" />
+            </div>
             {run.trabajoActual ? (
               <div className="job-details">
                 <p className="job-title">{run.trabajoActual.puesto}</p>
-                <p className="job-company">{run.trabajoActual.empresa} {run.trabajoActual.tier ? `• Tier ${run.trabajoActual.tier}` : ''}</p>
+                <p className="job-company">{run.trabajoActual.tier ? `• Tier ${run.trabajoActual.tier}` : ''}</p>
                 <div className="job-salary-badge">
                   Salario Anual: <strong>${(run.salarioActual || run.trabajoActual.salarioAnual || 0).toLocaleString()}</strong> / año
                 </div>
               </div>
             ) : (
               <div className="unemployed-badge">
-                <p className="job-title text-danger">🚨 DESPEDIDO / En Búsqueda Laboral</p>
+                <p className="job-title text-danger">Sin trabajo</p>
                 <p className="job-company">Sin empleo activo</p>
                 <div className="job-salary-badge salary-zero">
                   Ingresos Anuales: <strong>$0 / año</strong>
@@ -253,58 +355,72 @@ export const GamePage: React.FC = () => {
             )}
           </div>
 
-          {/* Lista Habilidades en Acordeón Desplegable */}
-          <div className="card skills-card">
+          {/* Lista Habilidades en Acordeón Desplegable con Marco de Habilidades y Sticker Flecha */}
+          <div className="skills-card-frame">
             <div
               className="skills-accordion-header"
               onClick={() => setSkillsExpanded(!skillsExpanded)}
               style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
-              <h3 style={{ margin: 0 }}>⚡ Habilidades ({habilidades.length})</h3>
-              <span className="accordion-arrow-icon" style={{ fontSize: '1.2rem', fontWeight: 'bold' }}>
-                {skillsExpanded ? '▲' : '▼'}
+              <h3 className="skills-title" style={{ margin: 0 }}>Habilidades ({habilidades.length})</h3>
+              <span className="accordion-arrow-icon">
+                <img
+                  src={flechaIcon}
+                  alt="Toggle Habilidades"
+                  className={`accordion-arrow-img ${skillsExpanded ? 'expanded' : ''}`}
+                />
               </span>
             </div>
 
             {skillsExpanded && (
-              <div className="skills-list" style={{ marginTop: '1rem' }}>
-                {habilidades.map((hab) => (
-                  <div key={hab.id || hab._id} className="skill-item">
-                    <div className="skill-info">
-                      <span className="skill-name">{hab.nombre}</span>
-                      <span className="skill-level">{hab.nivel || 0} / 10</span>
+              <div className="skills-list">
+                {habilidades.map((hab) => {
+                  const sticker = getSkillSticker(hab.nombre);
+                  return (
+                    <div key={hab.id || hab._id} className="skill-item">
+                      <div className="skill-info">
+                        <div className="skill-left-group">
+                          <img src={sticker} alt={hab.nombre} className="skill-sticker-icon" />
+                          <span className="skill-name">{hab.nombre}</span>
+                        </div>
+                        <span className="skill-level">{hab.nivel || 0} / 10</span>
+                      </div>
+                      <div className="skill-bar-track">
+                        <div
+                          className="skill-bar-fill"
+                          style={{ width: `${Math.min(100, Math.max(0, ((hab.nivel || 0) / 10) * 100))}%` }}
+                        />
+                      </div>
                     </div>
-                    <div className="skill-bar-track">
-                      <div
-                        className="skill-bar-fill"
-                        style={{ width: `${Math.min(100, Math.max(0, ((hab.nivel || 0) / 10) * 100))}%` }}
-                      />
-                    </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
 
-          {/* Botón Principal Avanzar Año */}
-          <button
-            className="btn btn-primary btn-advance-year btn-block"
-            onClick={handleAvanzarAño}
-            disabled={advancing || run.edadActual >= 65 || run.estado === 'Completada' || run.estado === 'MUERTO'}
-          >
-            {advancing
-              ? 'Avanzando...'
-              : run.edadActual >= 65 || run.estado === 'Completada' || run.estado === 'MUERTO'
-              ? '🏁 Partida Finalizada'
-              : '📅 Avanzar Año (+1 Año)'}
-          </button>
+          {/* Botón Principal Avanzar Año Usando Boton Siguiente Año Frame Overlay */}
+          <div className="btn-advance-year-container">
+            <img
+              src={botonSiguienteAno}
+              alt="Boton Avanzar Año"
+              className={`btn-advance-year-img ${advancing ? 'disabled' : ''}`}
+              onClick={handleAvanzarAño}
+            />
+            <div className="btn-advance-text-overlay" onClick={handleAvanzarAño}>
+              {advancing
+                ? 'AVANZANDO AÑO...'
+                : isFinishedRun
+                ? 'VER RANKING JUBILACIÓN'
+                : 'AVANZA AÑO'}
+            </div>
+          </div>
         </aside>
 
-        {/* COLUMNA DERECHA: HISTORIAL CON PAGINACIÓN DE 10 EN 10 */}
+        {/* COLUMNA DERECHA: HISTORIAL CON PAGINACIÓN DE 10 EN 10 Y TEXTURA LIBRETA */}
         <main className="game-right-column">
-          <div className="card history-card">
+          <div className="history-card-frame">
             <div className="history-header">
-              <h3>📜 Historial Profesional por Edad (18 a 65 Años)</h3>
+              <h3>Historial Profesional</h3>
               <span className="history-count">{historial.length} Registros Anuales</span>
             </div>
 
@@ -321,7 +437,7 @@ export const GamePage: React.FC = () => {
                 <tbody>
                   {currentHistorialPage.map((row) => (
                     <tr key={row.edad} className={row.edad === run.edadActual ? 'current-age-row' : ''}>
-                      <td className="age-cell">{row.edad} {row.edad === run.edadActual ? '📍' : ''}</td>
+                      <td className="age-cell">{row.edad}</td>
                       <td className="role-cell">{row.empresaYPuesto}</td>
                       <td className="salary-cell">${row.salarioAnual.toLocaleString()}</td>
                       <td className="accumulated-cell">${row.dineroAcumulado.toLocaleString()}</td>
@@ -332,25 +448,25 @@ export const GamePage: React.FC = () => {
             </div>
 
             {/* BARRA DE PAGINACIÓN */}
-            <div className="pagination-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', padding: '0.5rem 1rem' }}>
+            <div className="pagination-bar">
               <button
-                className="btn btn-secondary btn-sm"
+                className="btn-pagination-azul"
                 onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
                 disabled={currentPage === 1}
               >
-                ◀ Anterior
+                Anterior
               </button>
 
-              <span className="pagination-info" style={{ fontWeight: 'bold' }}>
+              <span className="pagination-info">
                 Página {currentPage} de {totalPages} ({historial.length} años)
               </span>
 
               <button
-                className="btn btn-secondary btn-sm"
+                className="btn-pagination-azul"
                 onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
                 disabled={currentPage === totalPages}
               >
-                Siguiente ▶
+                Siguiente
               </button>
             </div>
           </div>
@@ -384,3 +500,4 @@ export const GamePage: React.FC = () => {
     </div>
   );
 };
+

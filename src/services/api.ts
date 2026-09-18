@@ -140,6 +140,10 @@ export async function aumentarAño(userId: string, runId?: string): Promise<RunT
   if (updated) return updated;
 
   const allRuns = await getDetalleRun(userId);
+  if (runId) {
+    const matched = allRuns.find((r) => getId(r) === runId);
+    if (matched) return matched;
+  }
   return allRuns[0] || normalizeRun({});
 }
 
