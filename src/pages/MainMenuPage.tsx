@@ -6,6 +6,7 @@ import type { RunTrabajo } from '../types';
 import { RankingModal } from '../components/RankingModal';
 import { HistorialModal } from '../components/HistorialModal';
 import { logoLaburoYHambre } from '../assets';
+import { Footer } from '../components/Footer';
 
 export const MainMenuPage: React.FC = () => {
   const { user, logout } = useAuth();
@@ -37,6 +38,7 @@ export const MainMenuPage: React.FC = () => {
     setLoading(true);
     try {
       const newRun = await crearRun(user.id, 1);
+      setActiveRun(null);
       navigate('/game', { state: { targetRun: newRun, isNew: true } });
     } catch (err) {
       console.error('Error al iniciar nueva partida:', err);
@@ -125,6 +127,7 @@ export const MainMenuPage: React.FC = () => {
         )}
       </main>
 
+      <Footer />
       <RankingModal isOpen={showRanking} onClose={() => setShowRanking(false)} />
       <HistorialModal isOpen={showHistorial} onClose={() => setShowHistorial(false)} idUsuario={user?.id?.toString() ?? ''} />
     </div>

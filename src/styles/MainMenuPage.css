@@ -1,0 +1,157 @@
+/* --- MAIN MENU PAGE STYLES --- */
+.menu-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.92)), url('../assets/dieños .net/fondo mas lindo.png') center/cover no-repeat fixed;
+}
+
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 3rem;
+  background: url('../assets/dieños .net/fondo horizontal negro para estadisticas superiores.png') center/cover no-repeat;
+  border: none;
+  margin-top: 10px;
+  height: 163.7px;
+}
+
+.div-logo-inicio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.div-logo-inicio:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.05);
+  transition: all 0.2s ease;
+}
+
+.menu-logo-img {
+  max-height: 52px;
+  width: auto;
+}
+
+.menu-logo-img-principal {
+  width: 250px;
+  height: auto;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+  display: flex;
+}
+
+.user-welcome {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+.menu-content {
+  flex: 1;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.menu-title {
+  font-size: 2.6rem;
+  text-align: center;
+  letter-spacing: 1px;
+  margin-bottom: 0.5rem;
+}
+
+.menu-subtitle {
+  text-align: center;
+  color: var(--text-muted);
+  margin-bottom: 3rem;
+  font-size: 1.1rem;
+}
+
+.menu-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+.menu-card-frame {
+  background: url('../assets/dieños .net/fondo para contener datos.png') center/100% 100% no-repeat;
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.25s ease, filter 0.25s ease;
+  min-height: 300px;
+  border: none;
+  padding-top: 11rem;
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+  padding-bottom: 5rem;
+  margin-top: -50px;
+}
+
+.menu-card-frame:hover:not(.disabled) {
+  transform: translateY(-4px);
+  filter: brightness(1.05);
+}
+
+.menu-card-frame.disabled {
+  opacity: 0.55;
+}
+
+.card-badge {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: var(--bg-dark);
+  margin-bottom: 0.5rem;
+}
+
+.menu-card-frame h2 {
+  font-size: 1.55rem;
+  margin-bottom: 1rem;
+}
+
+.card-description {
+  color: #343434;
+  font-size: 0.95rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+.card-preview {
+  background: rgba(15, 23, 42, 0.416);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-size: 0.92rem;
+}
+
+.card-empty {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-pal-inicio {
+  background: url('../assets/dieños .net/boton siguiente año.png') center/cover no-repeat;
+  width: 280.717px;
+  height: 87.2px;
+  color: #333333;
+  border: none;
+  cursor: pointer;
+}
+
+.h3-inicio {
+  color: #333333;
+  margin-left: -55px;
+}
+
+.h2-inicio {
+  color: #b43c00;
+  padding-left: 10px;
+}

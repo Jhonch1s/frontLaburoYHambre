@@ -6,18 +6,31 @@ import fondoParaContenerDatos from './dieños .net/fondo para contener datos.png
 import fondoParaDatosSimple from './dieños .net/fondo para datos simple.png';
 import fondoParaHabilidades from './dieños .net/fondo para habilidades.png';
 import fondoPizarra from './dieños .net/fondo.png';
+import fondoPizarraLindo from './dieños .net/fondo mas lindo.png';
 import graficaRanking from './dieños .net/grafica diseño para hacer mas lindo el ranking.png';
 import libretaPizarra from './dieños .net/libreta.png';
 import logoLaburoYHambre from './dieños .net/logo LaburoYHambre.png';
 import marcoOpcion2Evento from './dieños .net/marco opcion 2 evento.png';
 import marcoHUD from './dieños .net/marco.png';
-import modalJubilacionResultados from './dieños .net/modal jubilacion resultados.png';
-import modalMuerteResultado from './dieños .net/modal muerte resultado.png';
-import modalRanking from './dieños .net/modal ranking.png';
 import nota2Azul from './dieños .net/nota 2 azul.png';
 import opcion1EventoMarco from './dieños .net/opcion 1 evento marco.png';
 import posicionFinalMarco from './dieños .net/posicion final marco.png';
 
+// Assets de Modales (.net)
+import modalJubilacionResultados from './modal .net/modal jubilacion resultado.png';
+import modalMuerteResultado from './modal .net/modal resultado muerte.png';
+import modalRanking from './modal .net/modal ranking (1).png';
+
+// Assets de Botones (.net)
+import botonAmarilloPequeno from './botones .net/boton amarillo pequeño.png';
+import botonAmarillo from './botones .net/boton amarillo.png';
+import botonAzul from './botones .net/boton azul.png';
+import botonAzulPequeno from './botones .net/boton pequeño azul.png';
+import botonVerdePequeno from './botones .net/boton pequeño verde.png';
+import botonRojoPequeno from './botones .net/boton rojo pequeño.png';
+import botonRojo from './botones .net/boton rojo.png';
+import botonVerde from './botones .net/boton verde.png';
+import botonVioleta from './botones .net/boton violeta.png';
 
 // Assets de Íconos y Stickers (.net)
 import cloudInfraSticker from './iconos .net/cloud_infra logo stiker.png';
@@ -59,6 +72,7 @@ export {
   fondoParaDatosSimple,
   fondoParaHabilidades,
   fondoPizarra,
+  fondoPizarraLindo,
   graficaRanking,
   libretaPizarra,
   logoLaburoYHambre,
@@ -70,6 +84,16 @@ export {
   nota2Azul,
   opcion1EventoMarco,
   posicionFinalMarco,
+  // Botones
+  botonAmarilloPequeno,
+  botonAmarillo,
+  botonAzul,
+  botonAzulPequeno,
+  botonVerdePequeno,
+  botonRojoPequeno,
+  botonRojo,
+  botonVerde,
+  botonVioleta,
   // Íconos & Stickers
   cloudInfraSticker,
   fantasmaSticker,

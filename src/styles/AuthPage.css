@@ -1,0 +1,112 @@
+/* --- AUTH PAGE STYLES --- */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100vh;
+  width: 100%;
+  padding: 0;
+  background: linear-gradient(rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.9)), url('../assets/dieños .net/fondo mas lindo.png') center/cover no-repeat fixed;
+}
+
+.auth-card-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 2rem 1.5rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: url('../assets/dieños .net/fondo para contener datos.png') center/100% 100% no-repeat;
+  border: none;
+  border-radius: var(--radius-lg);
+  padding-left: 4.5rem;
+  padding-right: 4.5rem;
+  padding-bottom: 7rem;
+  margin-top: 0;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.auth-logo-img {
+  max-width: 250px;
+  height: auto;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+}
+
+.brand-subtitle {
+  color: var(--bg-dark);
+  font-size: 1.5rem;
+  margin-top: 1.5rem;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.6));
+}
+
+.auth-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.8);
+  padding: 0.3rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tab-button {
+  flex: 1;
+  padding: 0.6rem;
+  background: transparent;
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.tab-button.active {
+  background: rgba(59, 130, 246, 0.3);
+  color: var(--text-main);
+  border: 1px solid var(--accent-primary);
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--bg-dark);
+}
+
+.form-group input {
+  padding: 0.75rem 1rem;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+}

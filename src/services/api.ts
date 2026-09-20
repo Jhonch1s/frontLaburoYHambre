@@ -70,12 +70,12 @@ export function normalizeRun(raw: any): RunTrabajo {
     _id: runId,
     userId: userId,
     user: userId,
-    edadActual: typeof raw.edadActual === 'number' ? raw.edadActual : 18,
-    añoActual: raw.anioActual || raw.añoActual || 2027,
-    anioActual: raw.anioActual || raw.añoActual || 2027,
-    dineroGenerado: typeof raw.dineroGenerado === 'number' ? raw.dineroGenerado : 0,
+    edadActual: typeof raw.edadActual === 'number' ? raw.edadActual : Number(raw.edadActual || 18),
+    añoActual: Number(raw.anioActual || raw.añoActual || 2027),
+    anioActual: Number(raw.anioActual || raw.añoActual || 2027),
+    dineroGenerado: typeof raw.dineroGenerado === 'number' ? raw.dineroGenerado : Number(raw.dineroGenerado || 0),
     salarioActual: esEmpleado ? (raw.salarioActual || (trabajoActual?.salarioAnual || 0)) : 0,
-    estado: raw.estado === 'MUERTO' ? 'MUERTO' : raw.estado === 'En proceso' ? 'ACTIVA' : raw.estado === 'Completada' ? 'FINALIZADA' : raw.estado || 'ACTIVA',
+    estado: raw.estado === 'MUERTO' || raw.muerto ? 'MUERTO' : (raw.estado?.toLowerCase().includes('completa') || raw.estado?.toLowerCase().includes('finaliza') || Number(raw.edadActual) >= 65) ? 'FINALIZADA' : raw.estado === 'En proceso' ? 'ACTIVA' : raw.estado || 'ACTIVA',
     muerto: raw.muerto || raw.estado === 'MUERTO',
     esSeniorInterno: raw.esSeniorInterno || false,
     trabajoActual: esEmpleado ? trabajoActual : null,
@@ -130,11 +130,15 @@ export async function getDetalleRun(userId: string): Promise<RunTrabajo[]> {
 }
 
 export async function aumentarAño(userId: string, runId?: string): Promise<RunTrabajo> {
-  if (runId) {
-    await api.patch(`/runTrabajo/aumentarAnio/${runId}/${userId}`);
+  try {
+    if (runId) {
+      await api.patch(`/runTrabajo/aumentarAnio/${runId}/${userId}`).catch(() => {});
+    }
+    await api.patch(`/runTrabajo/aumentarEdad/${userId}`).catch(() => {});
+    await api.patch(`/runTrabajo/aumentarDinero/${userId}`).catch(() => {});
+  } catch (err) {
+    console.warn('Advertencia al avanzar año en backend:', err);
   }
-  await api.patch(`/runTrabajo/aumentarEdad/${userId}`);
-  await api.patch(`/runTrabajo/aumentarDinero/${userId}`);
 
   const updated = await getRunActiva(userId);
   if (updated) return updated;
@@ -205,7 +209,11 @@ export async function evaluarEvento(_runId?: string, currentRun?: RunTrabajo | n
 
     // Obtener lista de IDs de eventos ya resueltos en esta partida
     const eventosResueltosIds = (currentRun.decisionesTomadas || [])
-      .map((d: any) => (d.evento ? String(d.evento) : ''))
+      .map((d: any) => {
+        if (typeof d === 'string') return d;
+        if (d.evento) return getId(d.evento) || String(d.evento);
+        return getId(d);
+      })
       .filter(Boolean);
 
     // A. Filtrar eventos por rango de edad
@@ -215,10 +223,12 @@ export async function evaluarEvento(_runId?: string, currentRun?: RunTrabajo | n
       return edad >= min && edad <= max;
     });
 
-    // B. Filtrar eventos no repetibles ya resueltos
+    // B. Filtrar eventos ya resueltos a menos que sean explícitamente repetibles
     eventosDB = eventosDB.filter((ev: any) => {
       const evId = getId(ev);
-      if (ev.repetible === false && eventosResueltosIds.includes(evId)) {
+      const yaResuelto = eventosResueltosIds.includes(evId);
+      const esRepetible = ev.repetible === true || String(ev.repetible) === 'true';
+      if (yaResuelto && !esRepetible) {
         return false;
       }
       return true;

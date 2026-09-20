@@ -1,0 +1,526 @@
+/* --- GAME PAGE & HUD STYLES --- */
+.game-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('../assets/dieños .net/fondo mas lindo.png') center/cover no-repeat fixed;
+}
+
+/* MARCO SUPERIOR HUD */
+.game-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 3.2rem;
+  min-height: 110px;
+  background: url('../assets/dieños .net/fondo horizontal negro para estadisticas superiores.png') center/cover no-repeat;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border: none !important;
+  box-shadow: none !important;
+  padding-left: 5rem;
+  padding-right: 5rem;
+  margin-top: 10px;
+  height: 163.7px;
+}
+
+.hud-brand {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.btn-menu-hud {
+  background: url('../assets/dieños .net/nota 2 azul.png') center/100% 100% no-repeat !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+  padding: 0.6rem 1.6rem !important;
+  height: 46px !important;
+  min-width: 105px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.btn-menu-hud:hover {
+  transform: scale(1.05);
+}
+
+.hud-logo-img {
+  height: 48px;
+  width: auto;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.6));
+}
+
+.hud-metrics-frame {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  background: transparent;
+  padding: 0;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.hud-pill {
+  display: flex;
+  flex-direction: column;
+  min-width: 130px;
+}
+
+.hud-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.hud-value {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.game-body-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 1.5rem;
+  padding: 0rem 2rem;
+  flex: 1;
+  max-width: 1600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 1024px) {
+  .game-body-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- COLUMNA IZQUIERDA: AVATAR & CARDS --- */
+.game-left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* AVATAR CARD CON FONDO DE MARCO */
+.player-avatar-frame-card {
+  background: url('../assets/dieños .net/fondo para contener datos.png') center/100% 100% no-repeat;
+  border: none !important;
+  border-radius: 0;
+  padding: 2.2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  box-shadow: none !important;
+}
+
+.avatar-direct-wrapper {
+  position: relative;
+  width: 120px;
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  rotate: -10deg;
+}
+
+.avatar-net-image-direct {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 1 !important;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.6));
+}
+
+.avatar-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 16px;
+  gap: 0.25rem;
+  width: 180.8px;
+  padding-top: 35px;
+  padding-bottom: 10px;
+  padding-right: 20px;
+}
+
+.avatar-title {
+  font-size: 1.25rem;
+  margin: 0;
+  font-weight: 800;
+  color: #1c1917 !important;
+}
+
+.avatar-wealth {
+  font-size: 0.95rem;
+  color: #047857 !important;
+  font-weight: 800;
+}
+
+.avatar-tag {
+  font-size: 0.85rem;
+  color: #44403c !important;
+  font-weight: 700;
+}
+
+/* TARJETA EMPRESA CON MARCO FONDO SIMPLE */
+.job-card-frame {
+  background: url('../assets/dieños .net/fondo para datos simple.png') center/100% 100% no-repeat;
+  border: none !important;
+  border-radius: 0;
+  padding: 3rem 2.5rem 2.2rem 3.5rem;
+  box-shadow: none !important;
+}
+
+.job-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.85rem;
+}
+
+.company-sticker-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,0.5));
+}
+
+.job-card-frame h3, .skills-card-frame h3 {
+  font-size: 1.15rem;
+  margin: 0;
+  font-weight: 800;
+  color: #1c1917 !important;
+}
+
+.job-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #1c1917 !important;
+  margin-bottom: 0.2rem;
+}
+
+.job-company {
+  font-size: 0.95rem;
+  color: #44403c !important;
+  font-weight: 700;
+}
+
+.job-salary-badge {
+  margin: 0.85rem auto 0 auto;
+  width: 90%;
+  text-align: center;
+  padding: 0.6rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: #1c1917 !important;
+  font-weight: 700;
+}
+
+.job-salary-badge strong {
+  color: #047857 !important;
+}
+
+.job-salary-badge.salary-zero {
+  border-color: rgba(220, 38, 38, 0.2) !important;
+  color: #991b1b !important;
+}
+
+.job-salary-badge.salary-zero strong {
+  color: #dc2626 !important;
+}
+
+/* TARJETA HABILIDADES CON MARCO FONDO HABILIDADES */
+.skills-card-frame {
+  background: url('../assets/dieños .net/fondo para habilidades.png') center/100% 100% no-repeat;
+  border: none !important;
+  border-radius: 0;
+  padding: 2.2rem 2.5rem 2.2rem 70px;
+  box-shadow: none !important;
+}
+
+.skills-accordion-header {
+  user-select: none;
+}
+
+.accordion-arrow-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  transform: rotate(0deg);
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+.accordion-arrow-img.expanded {
+  transform: rotate(180deg);
+}
+
+.skills-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  padding-right: 15px;
+  margin-top: 1rem;
+}
+
+.skill-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.skill-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.skill-left-group {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.skill-sticker-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+
+.skill-name {
+  font-weight: 800;
+  color: #ffffff !important;
+}
+
+.skills-title {
+  font-weight: 800;
+  color: #ffffff !important;
+}
+
+.skill-level {
+  color: #07be8b !important;
+  font-weight: 800;
+}
+
+.skill-bar-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(66, 66, 66, 0.574) !important;
+  border-radius: 5px;
+  overflow: hidden;
+  border: none !important;
+}
+
+.skill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb 0%, #10b981 100%);
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+/* BOTON AVANZA AÑO FLOTANTE EN ESQUINA INFERIOR DERECHA */
+.btn-advance-year-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 1000;
+  width: 240px;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.7));
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+.btn-advance-year-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  box-shadow: none !important;
+}
+
+.btn-advance-year-img:hover:not(.disabled) {
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.1);
+}
+
+.btn-advance-year-img.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-advance-text-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: 1.25rem;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 14px rgba(59, 130, 246, 0.9);
+  cursor: pointer;
+}
+
+/* --- COLUMNA DERECHA: HISTORIAL LIBRETA --- */
+.game-right-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-card-frame {
+  display: flex;
+  flex-direction: column;
+  background: url('../assets/dieños .net/libreta.png') center/100% 100% no-repeat;
+  border: none !important;
+  border-radius: 0;
+  padding: 180px 3.5rem 2.5rem 7rem;
+  box-shadow: none !important;
+  min-height: 1020px;
+}
+
+.history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.history-header h3 {
+  font-size: 1.25rem;
+  color: #1c1917 !important;
+  text-shadow: none;
+  font-weight: 800;
+}
+
+.history-count {
+  font-size: 0.88rem;
+  background: rgba(0, 0, 0, 0.08) !important;
+  padding: 0.35rem 0.9rem;
+  border-radius: 6px;
+  color: #1c1917 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  font-weight: 800;
+}
+
+.history-table-container {
+  overflow-y: auto;
+  max-height: 600px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: none;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.history-table th {
+  background: rgba(0, 0, 0, 0.08) !important;
+  padding: 0.95rem 1.1rem;
+  color: #1c1917 !important;
+  font-weight: 800;
+  position: sticky;
+  top: 0;
+  border-bottom: 2px solid #1c1917 !important;
+}
+
+.history-table td {
+  padding: 0.85rem 1.1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+  color: #1c1917 !important;
+  font-weight: 700;
+}
+
+.history-table tr.current-age-row {
+  background: rgba(59, 130, 246, 0.2) !important;
+  font-weight: 800;
+}
+
+.role-cell-content {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.history-company-sticker {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.age-cell {
+  font-weight: 800;
+  color: #1d4ed8 !important;
+  width: 80px;
+}
+
+.accumulated-cell {
+  color: #047857 !important;
+  font-weight: 800;
+}
+
+.pagination-bar {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.2rem;
+  padding: 0.5rem 0.5rem;
+}
+
+.pagination-info {
+  color: #1c1917 !important;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.btn-pagination-azul {
+  background: url('../assets/dieños .net/nota 2 azul.png') center/100% 100% no-repeat !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 0.95rem !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
+  padding: 0.6rem 1.6rem !important;
+  height: 44px !important;
+  min-width: 110px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.btn-pagination-azul:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+.btn-pagination-azul:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}

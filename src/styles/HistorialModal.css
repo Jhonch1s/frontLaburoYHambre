@@ -1,0 +1,35 @@
+/* --- HISTORIAL MODAL STYLES --- */
+.historial-modal-card {
+  max-width: 860px;
+  width: 95%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.9);
+  padding: 3.5rem 3.5rem;
+  background: url('../assets/modal .net/modal ranking (1).png') center/100% 100% no-repeat;
+  border: none;
+}
+
+.historial-action-btn {
+  background: url('../assets/botones .net/boton pequeño azul.png') center/100% 100% no-repeat !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  font-size: 0.82rem !important;
+  padding: 0.35rem 1rem !important;
+  height: 36px !important;
+  min-width: 90px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  font-family: var(--font-heading);
+}
+
+.historial-action-btn:hover {
+  transform: scale(1.04);
+  filter: brightness(1.15);
+}

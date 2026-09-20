@@ -1,0 +1,130 @@
+/* --- EVENT MODAL STYLES --- */
+.event-modal-card-frame {
+  background: url('../assets/dieños .net/fondo modal evento.png') center/100% 100% no-repeat;
+  border-radius: var(--radius-lg);
+  max-width: 660px;
+  width: 100%;
+  padding: 3rem 3.2rem;
+  animation: modalPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: none;
+  padding-left: 4.5rem;
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.event-modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.event-modal-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 40px;
+  padding-left: 180px;
+  padding-top: 50px;
+  margin-bottom: -30px;
+}
+
+.event-badge {
+  background: rgba(245, 158, 11, 0.25);
+  color: var(--accent-gold);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.event-modal-header h2 {
+  font-size: 1.7rem;
+  margin: 0;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.8);
+}
+
+.evento-titulo {
+  padding-left: 40px;
+  padding-top: 40px;
+}
+
+.event-description {
+  color: #f1f5f9;
+  margin: 1.2rem 0 1.6rem 0;
+  line-height: 1.6;
+  font-size: 1.08rem;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+  padding-left: 40px;
+}
+
+.event-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.event-option-button {
+  border-radius: var(--radius-md);
+  padding: 1.35rem 1.6rem;
+  text-align: left;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: none;
+  padding-left: 5.5rem;
+  padding-right: 4rem;
+  background-position: center;
+}
+
+.event-option-button.option-frame-1 {
+  background: url('../assets/dieños .net/opcion 1 evento marco.png') center/100% 100% no-repeat;
+}
+
+.event-option-button.option-frame-2 {
+  background: url('../assets/dieños .net/marco opcion 2 evento.png') center/100% 100% no-repeat;
+}
+
+.event-option-button:hover {
+  transform: translateY(-2px) scale(1.01);
+  filter: brightness(1.1);
+}
+
+.option-text {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.05rem;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.option-impacts {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.impact-skill {
+  color: var(--accent-primary);
+}
+
+.impact-money {
+  color: var(--accent-success);
+}

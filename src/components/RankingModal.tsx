@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getRankingGlobal } from '../services/api';
 import type { RunTrabajo, Habilidad } from '../types';
 import { PlayerAvatar } from './PlayerAvatar';
+import { useAuth } from '../context/AuthContext';
 import {
-  graficaRanking,
   primerPuestoSticker,
   segundoPuestoSticker,
   tercerPuestoSticker,
@@ -35,12 +35,13 @@ export const RankingModal: React.FC<RankingModalProps> = ({
 }) => {
   const [ranking, setRanking] = useState<RankingItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [playerPosition, setPlayerPosition] = useState<number | null>(null);
+  const { user } = useAuth();
 
   const esMuerto = finalRun?.estado === 'MUERTO' || finalRun?.muerto;
+  const esResultado = isJubilacion || esMuerto;
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !esResultado) {
       setLoading(true);
       getRankingGlobal()
         .then((data) => {
@@ -55,17 +56,10 @@ export const RankingModal: React.FC<RankingModalProps> = ({
             .sort((a, b) => b.dineroGenerado - a.dineroGenerado);
 
           setRanking(normalized);
-
-          if (finalRun) {
-            const pos = normalized.findIndex(
-              (r) => r.dineroGenerado <= finalRun.dineroGenerado
-            );
-            setPlayerPosition(pos !== -1 ? pos + 1 : normalized.length + 1);
-          }
         })
         .finally(() => setLoading(false));
     }
-  }, [isOpen, finalRun]);
+  }, [isOpen, esResultado]);
 
   if (!isOpen) return null;
 
@@ -85,98 +79,88 @@ export const RankingModal: React.FC<RankingModalProps> = ({
   return (
     <div className="modal-overlay">
       <div className={`modal-card ranking-modal-card ${modalFrameClass}`}>
-        <div className="ranking-header">
-          {isJubilacion || esMuerto ? (
-            <div className={esMuerto ? 'jubilacion-banner dead-banner' : 'jubilacion-banner'}>
-              <h2>{esMuerto ? 'PARTIDA FINALIZADA — PERSONAJE FALLECIDO' : 'PARTIDA FINALIZADA — JUBILACIÓN CUMPLIDA'}</h2>
-              <p>{esMuerto ? 'Tu trayectoria profesional concluyó de forma abrupta antes de tiempo.' : 'Has completado tu carrera laboral con éxito a los 65 años en LaburoYHambre.'}</p>
-            </div>
-          ) : (
-            <h2>TABLA DE POSICIONES GLOBAL</h2>
-          )}
-        </div>
-
-        {(isJubilacion || esMuerto) && finalRun && (
-          <div className="career-summary-box">
-            <div className="summary-top-row">
-              <div className="summary-avatar-wrapper">
-                <PlayerAvatar edadActual={finalRun.edadActual} dineroGenerado={finalRun.dineroGenerado} />
+        {esResultado ? (
+          /* RESULTADO JUBILACIÓN / MUERTE COMPACTO DENTRO DEL MARCO */
+          <div className="result-modal-container">
+            <div className="result-header-row">
+              <div className="result-avatar-box">
+                <PlayerAvatar edadActual={finalRun?.edadActual || 65} dineroGenerado={finalRun?.dineroGenerado || 0} />
               </div>
 
-              <div className="summary-stats-column">
-                <div className="summary-pill highlight-rank-frame">
-                  <span className="summary-label">Posición en el Ranking Global</span>
-                  <span className="summary-value">#{playerPosition || 1}</span>
+              <div className="result-main-details">
+                <h2 className="result-player-name">{user?.username || 'Desarrollador'}</h2>
+                <div className="result-stat-line">
+                  <span className="result-stat-label">Patrimonio Generado:</span>
+                  <span className="result-stat-money">${(finalRun?.dineroGenerado || 0).toLocaleString()}</span>
                 </div>
-
-                <div className="summary-pill">
-                  <span className="summary-label">Dinero Acumulado Total</span>
-                  <span className="summary-value">${finalRun.dineroGenerado.toLocaleString()}</span>
-                </div>
-
-                <div className="summary-pill">
-                  <span className="summary-label">Estado Final / Edad</span>
-                  <span className="summary-value">{finalRun.edadActual} Años ({esMuerto ? 'MUERTO' : 'JUBILADO'})</span>
+                <div className="result-stat-line">
+                  <span className="result-stat-label">Estado Final:</span>
+                  <span className={`result-stat-status ${esMuerto ? 'dead' : 'retired'}`}>
+                    {finalRun?.edadActual || 65} Años - {esMuerto ? 'FALLECIDO' : 'JUBILADO'}
+                  </span>
                 </div>
               </div>
             </div>
 
-            {/* HABILIDADES FINALES */}
-            <div className="summary-skills-section">
-              <h4>Nivel Final de Habilidades Alcanzadas</h4>
-              <div className="summary-skills-grid">
-                {finalHabilidades.map((hab) => (
-                  <div key={hab.id || hab._id} className="summary-skill-chip">
-                    <span className="summary-skill-name">{hab.nombre}</span>
-                    <span className="summary-skill-level">{hab.nivel || 0} / 10</span>
-                  </div>
-                ))}
+            {/* HABILIDADES FINALES SUPER COMPACTAS */}
+            {finalHabilidades.length > 0 && (
+              <div className="result-skills-compact">
+                <h4 className="result-skills-title">Habilidades Alcanzadas</h4>
+                <div className="result-skills-grid">
+                  {finalHabilidades.map((hab) => (
+                    <div key={hab.id || hab._id} className="result-skill-tag">
+                      <span className="skill-tag-name">{hab.nombre}</span>
+                      <span className="skill-tag-level">{hab.nivel || 0}/10</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-
-            {/* DECORACIÓN GRÁFICA RANKING */}
-            <img src={graficaRanking} alt="Grafico Rendimiento" className="grafica-ranking-img" />
+            )}
           </div>
-        )}
-
-        <h3 className="leaderboard-title">Clasificación General de Jugadores</h3>
-
-        {loading ? (
-          <div className="modal-spinner">Cargando posiciones del servidor...</div>
         ) : (
-          <div className="ranking-table-wrapper">
-            <table className="ranking-table">
-              <thead>
-                <tr>
-                  <th>Posición</th>
-                  <th>Jugador</th>
-                  <th>Edad Final</th>
-                  <th>Patrimonio Generado</th>
-                </tr>
-              </thead>
-              <tbody>
-                {ranking.map((item, index) => {
-                  return (
-                    <tr key={item.id} className={index < 3 ? 'top-rank' : ''}>
-                      <td className="rank-position">{getMedalSticker(index)}</td>
-                      <td className="rank-user">{item.username}</td>
-                      <td>{item.edadActual} años {item.estado === 'MUERTO' ? '(Fallecido)' : ''}</td>
-                      <td className="rank-money">${item.dineroGenerado.toLocaleString()}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+          /* CLASIFICACIÓN GENERAL GLOBAL (DESDE EL MENÚ PRINCIPAL) */
+          <>
+            <div className="ranking-header">
+              <h2>TABLA DE POSICIONES GLOBAL</h2>
+            </div>
 
-        <div className="ranking-modal-actions">
-          <button className="btn btn-primary" onClick={onClose}>
-            {isJubilacion || esMuerto ? 'Volver al Menú Principal' : 'Cerrar Ranking'}
-          </button>
-        </div>
+            <h3 className="leaderboard-title">Clasificación General de Jugadores</h3>
+
+            {loading ? (
+              <div className="modal-spinner">Cargando posiciones del servidor...</div>
+            ) : (
+              <div className="ranking-table-wrapper">
+                <table className="ranking-table">
+                  <thead>
+                    <tr>
+                      <th>Posición</th>
+                      <th>Jugador</th>
+                      <th>Edad Final</th>
+                      <th>Patrimonio Generado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ranking.map((item, index) => (
+                      <tr key={item.id} className={index < 3 ? 'top-rank' : ''}>
+                        <td className="rank-position">{getMedalSticker(index)}</td>
+                        <td className="rank-user">{item.username}</td>
+                        <td>{item.edadActual} años {item.estado === 'MUERTO' ? '(Fallecido)' : ''}</td>
+                        <td className="rank-money">${item.dineroGenerado.toLocaleString()}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <div className="ranking-modal-actions">
+              <button className="btn-ranking-close" onClick={onClose}>
+                Cerrar Ranking
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
 };
-

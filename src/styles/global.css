@@ -1,0 +1,161 @@
+/* --- GLOBAL FONTS & STYLES --- */
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@600;700;800&family=Outfit:wght@400;600;700;800&display=swap');
+
+:root {
+  --font-heading: 'Chakra Petch', 'Outfit', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+  --bg-dark: #0f172a;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --accent-primary: #0340d0;
+  --accent-success: #10b981;
+  --accent-warning: #f59e0b;
+  --accent-gold: #fbbf24;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
+/* --- BOTONES & UTILIDADES BASE --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.6rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  border-radius: var(--radius-md);
+  transition: transform 0.2s ease, filter 0.2s ease;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-heading);
+  background: url('../assets/botones .net/boton azul.png') center/cover no-repeat;
+  color: #ffffff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.btn-header {
+  background: url('../assets/botones .net/boton verde.png') center/cover no-repeat;
+  width: 280.717px;
+  height: 87.2px;
+  color: #ffffff;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.6rem;
+  font-size: 0.95rem;
+  font-weight: 800;
+  border-radius: var(--radius-md);
+  transition: transform 0.2s ease, filter 0.2s ease;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-family: var(--font-heading);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+  filter: grayscale(0.8);
+}
+
+.btn-primary, .btn-secondary, .btn-success, .btn-outline {
+  background: url('../assets/botones .net/boton azul.png') center/cover no-repeat;
+  width: 342.717px;
+  height: 87.2px;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled),
+.btn-secondary:hover:not(:disabled),
+.btn-success:hover:not(:disabled),
+.btn-outline:hover:not(:disabled),
+.btn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.02);
+  filter: brightness(1.15);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-sm {
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.alert {
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.2);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1.5rem;
+}
+
+.menu-spinner, .game-spinner, .modal-spinner {
+  text-align: center;
+  padding: 4rem;
+  color: var(--text-muted);
+  font-size: 1.15rem;
+}
+
+/* --- GLOBAL APP FOOTER --- */
+.app-footer {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.5rem;
+  text-align: center;
+  margin-top: auto;
+  position: relative;
+  z-index: 5;
+}
+
+.app-footer p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+

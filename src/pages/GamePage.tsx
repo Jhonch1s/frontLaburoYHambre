@@ -16,6 +16,7 @@ import { PlayerAvatar } from '../components/PlayerAvatar';
 import { EventModal } from '../components/EventModal';
 import { RankingModal } from '../components/RankingModal';
 import { DeathScreenOverlay } from '../components/DeathScreenOverlay';
+import { Footer } from '../components/Footer';
 import {
   logoLaburoYHambre,
   botonSiguienteAno,
@@ -66,12 +67,12 @@ export const GamePage: React.FC = () => {
   };
 
   // Helper sticker para empresas
-  const getCompanySticker = (empresaName?: string) => {
-    if (!empresaName) return despidoSticker;
-    const lower = empresaName.toLowerCase();
-    if (lower.includes('google')) return googleSticker;
-    if (lower.includes('mercado') || lower.includes('libre')) return mercadoLibreSticker;
-    if (lower.includes('globant')) return globantSticker;
+  const getCompanySticker = (empresaName?: string, puestoName?: string) => {
+    const text = `${empresaName || ''} ${puestoName || ''}`.toLowerCase();
+    if (!text.trim() || text.includes('despedido') || text.includes('desempleado') || text.includes('búsqueda') || text.includes('sin empleo') || text.includes('sin trabajo')) return despidoSticker;
+    if (text.includes('google')) return googleSticker;
+    if (text.includes('mercado') || text.includes('libre') || text.includes('meli')) return mercadoLibreSticker;
+    if (text.includes('globant')) return globantSticker;
     return startupSticker;
   };
 
@@ -83,12 +84,27 @@ export const GamePage: React.FC = () => {
     const targetRun = location.state?.targetRun as RunTrabajo | undefined;
     const isNew = location.state?.isNew as boolean | undefined;
 
+    // Si es una nueva partida iniciada desde el menú
+    if (isNew && targetRun) {
+      setRun(targetRun);
+      const runId = getId(targetRun);
+      if (runId) {
+        getHabilidades(runId).then((habs) => setHabilidades([...habs]));
+      }
+      rebuildHistorial(targetRun);
+      setCurrentEvento(null);
+      setShowJubilacionModal(false);
+      setLoading(false);
+      return;
+    }
+
     if (targetRun && getId(targetRun) && !isNew) {
       setRun(targetRun);
       const runId = getId(targetRun);
       getHabilidades(runId).then((habs) => setHabilidades([...habs]));
       rebuildHistorial(targetRun);
       if (targetRun.edadActual >= 65 || targetRun.estado === 'Completada' || targetRun.estado === 'FINALIZADA') {
+        setCurrentEvento(null);
         setShowJubilacionModal(true);
       }
       setLoading(false);
@@ -107,6 +123,7 @@ export const GamePage: React.FC = () => {
                 setHabilidades([...habs]);
               }
               rebuildHistorial(lastRun);
+              setCurrentEvento(null);
               setShowJubilacionModal(true);
               setLoading(false);
               return;
@@ -124,6 +141,7 @@ export const GamePage: React.FC = () => {
 
           rebuildHistorial(current);
           if (current && (current.edadActual >= 65 || current.estado === 'Completada' || current.estado === 'FINALIZADA')) {
+            setCurrentEvento(null);
             setShowJubilacionModal(true);
           }
         })
@@ -188,35 +206,47 @@ export const GamePage: React.FC = () => {
       run.estado === 'MUERTO';
 
     if (isAlreadyFinished) {
-      setShowJubilacionModal(true);
+      navigate('/menu');
       return;
     }
 
     setAdvancing(true);
 
+    let updatedRun: RunTrabajo | null = null;
+    let nextAge = currentAge + 1;
+
     try {
       const runId = getId(run);
-      const updatedRun = await aumentarAño(user.id, runId);
-      const newAge = Math.max(currentAge + 1, Number(updatedRun.edadActual || currentAge + 1));
-      const isRetirement =
-        newAge >= 65 ||
-        updatedRun.estado?.toLowerCase() === 'completada' ||
-        updatedRun.estado?.toLowerCase() === 'finalizada';
-
-      if (isRetirement) {
-        const completedRun: RunTrabajo = {
-          ...updatedRun,
-          edadActual: 65,
-          estado: 'Completada',
-        };
-        setRun(completedRun);
-        rebuildHistorial(completedRun);
-        setCurrentEvento(null);
-        setShowJubilacionModal(true);
-        setAdvancing(false);
-        return;
+      updatedRun = await aumentarAño(user.id, runId);
+      if (updatedRun && updatedRun.edadActual) {
+        nextAge = Math.max(nextAge, Number(updatedRun.edadActual));
       }
+    } catch (err) {
+      console.warn('Backend avanzarAño devolvió excepción, procediendo a jubilación:', err);
+    }
 
+    const isRetirement =
+      nextAge >= 65 ||
+      (updatedRun && (
+        updatedRun.estado?.toLowerCase() === 'completada' ||
+        updatedRun.estado?.toLowerCase() === 'finalizada'
+      ));
+
+    if (isRetirement) {
+      const completedRun: RunTrabajo = {
+        ...(updatedRun || run),
+        edadActual: 65,
+        estado: 'Completada',
+      };
+      setRun(completedRun);
+      rebuildHistorial(completedRun);
+      setCurrentEvento(null);
+      setShowJubilacionModal(true);
+      setAdvancing(false);
+      return;
+    }
+
+    if (updatedRun) {
       setRun(updatedRun);
       const updatedRunId = getId(updatedRun);
       const updatedHabs = await getHabilidades(updatedRunId);
@@ -228,11 +258,16 @@ export const GamePage: React.FC = () => {
       if (evento) {
         setCurrentEvento(evento);
       }
-    } catch (err) {
-      console.error('Error al avanzar el año:', err);
-    } finally {
-      setAdvancing(false);
+    } else {
+      const fallbackRun: RunTrabajo = {
+        ...run,
+        edadActual: nextAge,
+      };
+      setRun(fallbackRun);
+      rebuildHistorial(fallbackRun);
     }
+
+    setAdvancing(false);
   };
 
   const handleTomarDecision = async (opcionId: string) => {
@@ -257,6 +292,7 @@ export const GamePage: React.FC = () => {
           result.runActualizada.estado?.toLowerCase() === 'finalizada' ||
           Number(result.runActualizada.edadActual || 0) >= 65
         ) {
+          setCurrentEvento(null);
           setShowJubilacionModal(true);
         }
       }
@@ -282,7 +318,7 @@ export const GamePage: React.FC = () => {
   const totalPages = Math.max(1, Math.ceil(historial.length / itemsPerPage));
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentHistorialPage = historial.slice(startIndex, startIndex + itemsPerPage);
-  const currentCompanySticker = getCompanySticker(run.trabajoActual?.empresa);
+  const currentCompanySticker = getCompanySticker(run.trabajoActual?.empresa, run.trabajoActual?.puesto);
   const isFinishedRun =
     Number(run.edadActual || 18) >= 65 ||
     run.estado?.toLowerCase() === 'completada' ||
@@ -410,7 +446,7 @@ export const GamePage: React.FC = () => {
               {advancing
                 ? 'AVANZANDO AÑO...'
                 : isFinishedRun
-                ? 'VER RANKING JUBILACIÓN'
+                ? 'MENÚ'
                 : 'AVANZA AÑO'}
             </div>
           </div>
@@ -438,7 +474,12 @@ export const GamePage: React.FC = () => {
                   {currentHistorialPage.map((row) => (
                     <tr key={row.edad} className={row.edad === run.edadActual ? 'current-age-row' : ''}>
                       <td className="age-cell">{row.edad}</td>
-                      <td className="role-cell">{row.empresaYPuesto}</td>
+                      <td className="role-cell">
+                        <div className="role-cell-content">
+                          <img src={getCompanySticker(row.empresaYPuesto)} alt="Empresa Sticker" className="history-company-sticker" />
+                          <span>{row.empresaYPuesto}</span>
+                        </div>
+                      </td>
                       <td className="salary-cell">${row.salarioAnual.toLocaleString()}</td>
                       <td className="accumulated-cell">${row.dineroAcumulado.toLocaleString()}</td>
                     </tr>
@@ -472,6 +513,9 @@ export const GamePage: React.FC = () => {
           </div>
         </main>
       </div>
+
+      {/* FOOTER GLOBAL */}
+      <Footer />
 
       {/* EVENT MODAL */}
       <EventModal evento={currentEvento} onSelectOption={handleTomarDecision} />
