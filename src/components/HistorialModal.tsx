@@ -35,6 +35,7 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [playerPosition, setPlayerPosition] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen) {
@@ -71,7 +72,7 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
     return `#${index + 1}`;
   };
 
-  const navigate = useNavigate();
+  
 
   return (
     <div className="modal-overlay">
@@ -116,8 +117,6 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
                 <tr>
                   <th>#</th>
                   <th>Fecha</th>
-                  <th>Estado</th>
-                  <th>Edad Final</th>
                   <th>Patrimonio Generado</th>
                   <th>Acciones</th>
                 </tr>
@@ -132,11 +131,9 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
                     <tr key={item.id} className={index < 3 ? 'top-rank' : ''}>
                       <td className="rank-position">{getMedalSticker(index)}</td>
                       <td>{dateStr}</td>
-                      <td> { item.edadActual != null && item.edadActual < 65 ? '💀 Fallecido' : '🏁 Jubilado' }</td>
-                      <td className="rank-user">{item.edadActual} años</td>
                       <td className="rank-money">${item.dineroGenerado.toLocaleString()}</td>
                       <td>
-                        <button className='btn' onClick={ () => navigate('/historial')}>
+                        <button className='btn' onClick={ () => navigate(`/historial/${item.id}`)}>
                           Detalle
                         </button>
                       </td>

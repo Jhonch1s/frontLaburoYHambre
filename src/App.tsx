@@ -51,7 +51,7 @@ function AppRoutes() {
         }
       />
       <Route
-        path="/historial"
+        path="/historial/:id"
         element={
           <ProtectedRoute>
             <AccionesPage/>

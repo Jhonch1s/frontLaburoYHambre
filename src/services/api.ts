@@ -367,3 +367,5 @@ export async function getPartidasAnteriores(idUsuario: string): Promise<any[]>{
 
   return [];
 }
+
+
