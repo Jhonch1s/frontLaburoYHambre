@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import { AuthPage } from './pages/AuthPage';
 import { MainMenuPage } from './pages/MainMenuPage';
 import { GamePage } from './pages/GamePage';
+import { AccionesPage } from './pages/AccionesPage';
 import './App.css';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -48,6 +49,15 @@ function AppRoutes() {
             <GamePage />
           </ProtectedRoute>
         }
+      />
+      <Route
+        path="/historial"
+        element={
+          <ProtectedRoute>
+            <AccionesPage/>
+          </ProtectedRoute>
+        }
+
       />
       <Route path="*" element={<Navigate to="/menu" replace />} />
     </Routes>

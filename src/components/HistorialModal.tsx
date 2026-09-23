@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getPartidasAnteriores } from '../services/api';
 import type { RunTrabajo } from '../types';
 import {
@@ -34,7 +35,6 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
   const [historial, setHistorial] = useState<HistorialItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [playerPosition, setPlayerPosition] = useState<number | null>(null);
-  const esMuerto = finalRun?.estado === 'MUERTO' || finalRun?.muerto;
 
   useEffect(() => {
     if (isOpen) {
@@ -71,6 +71,8 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
     return `#${index + 1}`;
   };
 
+  const navigate = useNavigate();
+
   return (
     <div className="modal-overlay">
       <div className="modal-card ranking-modal-card">
@@ -95,7 +97,7 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
                 <div className="summary-pill">
                   <span className="summary-label">Estado Final / Edad</span>
                   <span className="summary-value">
-                    {finalRun.edadActual} Años ({esMuerto ? '💀 MUERTO' : '🏁 JUBILADO'})
+                    {finalRun.edadActual} Años ({finalRun.edadActual < 65 ? 'Muerto': 'Jubilado'})
                   </span>
                 </div>
               </div>
@@ -117,6 +119,7 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
                   <th>Estado</th>
                   <th>Edad Final</th>
                   <th>Patrimonio Generado</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -124,15 +127,19 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
                   const dateStr = item.fecha
                     ? new Date(item.fecha).toLocaleDateString('es-ES')
                     : 'Histórico';
-                  const esPartidaMuerto = item.estado === 'MUERTO';
 
                   return (
                     <tr key={item.id} className={index < 3 ? 'top-rank' : ''}>
                       <td className="rank-position">{getMedalSticker(index)}</td>
                       <td>{dateStr}</td>
-                      <td>{esPartidaMuerto ? '💀 Fallecido' : '🏁 Jubilado'}</td>
+                      <td> { item.edadActual != null && item.edadActual < 65 ? '💀 Fallecido' : '🏁 Jubilado' }</td>
                       <td className="rank-user">{item.edadActual} años</td>
                       <td className="rank-money">${item.dineroGenerado.toLocaleString()}</td>
+                      <td>
+                        <button className='btn' onClick={ () => navigate('/historial')}>
+                          Detalle
+                        </button>
+                      </td>
                     </tr>
                   );
                 })}
