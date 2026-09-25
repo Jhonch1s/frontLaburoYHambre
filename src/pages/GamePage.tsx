@@ -364,7 +364,7 @@ export const GamePage: React.FC = () => {
         {/* COLUMNA IZQUIERDA: PANEL DE CONTROL */}
         <aside className="game-left-column">
           {/* Avatar Dinámico */}
-          <PlayerAvatar edadActual={run.edadActual || 18} dineroGenerado={run.dineroGenerado || 0} />
+          <PlayerAvatar edadActual={run.edadActual || 18} dineroGenerado={run.dineroGenerado || 0} estaMuerto={false} />
 
           {/* Tarjeta Trabajo Actual con Marco Simple y Sticker de Empresa */}
           <div className="job-card-frame">

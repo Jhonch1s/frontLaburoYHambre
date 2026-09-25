@@ -44,10 +44,13 @@ export function normalizeRun(raw: any): RunTrabajo {
   const runId = getId(raw);
   const userId = typeof raw.user === 'object' ? getId(raw.user) : String(raw.user || raw.usuario || '');
 
+  const esEmpleadoActivo = raw.empleado === true && raw.salarioActual > 0;
+  const tieneReferenciaTrabajo = raw.trabajo !== null && raw.trabajo !== undefined;
+
   let trabajoActual = null;
   const esEmpleado = raw.empleado !== false && raw.trabajo !== null;
 
-  if (esEmpleado && raw.trabajo && typeof raw.trabajo === 'object') {
+  if (tieneReferenciaTrabajo && raw.trabajo && typeof raw.trabajo === 'object') {
     trabajoActual = {
       id: getId(raw.trabajo),
       puesto: raw.trabajo.puesto || raw.trabajo.nombre || 'Desarrollador',
@@ -78,7 +81,7 @@ export function normalizeRun(raw: any): RunTrabajo {
     estado: raw.estado === 'MUERTO' || raw.muerto ? 'MUERTO' : (raw.estado?.toLowerCase().includes('completa') || raw.estado?.toLowerCase().includes('finaliza') || Number(raw.edadActual) >= 65) ? 'FINALIZADA' : raw.estado === 'En proceso' ? 'ACTIVA' : raw.estado || 'ACTIVA',
     muerto: raw.muerto || raw.estado === 'MUERTO',
     esSeniorInterno: raw.esSeniorInterno || false,
-    trabajoActual: esEmpleado ? trabajoActual : null,
+    trabajoActual: tieneReferenciaTrabajo ? trabajoActual : null,
     estudioNombre: 'Tecnólogo en Informática',
     decisionesTomadas: raw.decisionesTomadas || [],
     historialAnual: raw.historialAnual || [],
@@ -352,7 +355,6 @@ export async function getPartidasAnteriores(idUsuario: string): Promise<any[]>{
       ? [raw]
       : [];
 
-    console.log(raw)
     return list.map((item: any, idx: number) => {
       const userObj = typeof item.user === 'object' ? item.user: {};
       return {
@@ -369,3 +371,14 @@ export async function getPartidasAnteriores(idUsuario: string): Promise<any[]>{
 }
 
 
+export async function getDetallePartida(idRunTrabajo: string): Promise<RunTrabajo>{
+  const res = await api.get(`/runTrabajo/obtenerRunTrabajoDetalle/${idRunTrabajo}`);
+  console.log(idRunTrabajo)
+  console.log(res);
+
+  const raw = Array.isArray(res.data) ? res.data[0] : res.data;
+  console.log(raw);
+  return normalizeRun(raw);
+
+
+}

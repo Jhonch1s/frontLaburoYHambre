@@ -62,6 +62,7 @@ import adultoRico from './personaje .net/adulto rico.png';
 import viejoPobre from './personaje .net/pobre viejo.png';
 import viejoModerado from './personaje .net/viejo plata moderada.png';
 import viejoRico from './personaje .net/viejo rico.png';
+import muerto from './personaje .net/muerto.png';
 
 export {
   // Diseños
@@ -123,4 +124,5 @@ export {
   viejoPobre,
   viejoModerado,
   viejoRico,
+  muerto
 };
