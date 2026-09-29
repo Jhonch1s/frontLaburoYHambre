@@ -67,8 +67,8 @@ export const AccionesPage: React.FC = () => {
     };
 
     const chartData = {
-        labels: oldRun?.historialAnual?.map((h) => (h.anio ?? 0).toString()) ?? [],
-        values: oldRun?.historialAnual?.map((h) => h.dineroAcumulado) ?? [],
+        anios: oldRun?.historialAnual?.map((h) => (h.anio ?? 0).toString()) ?? [],
+        dinero: oldRun?.historialAnual?.map((h) => h.dineroAcumulado) ?? [],
     };
 
     console.log(chartData)
@@ -166,10 +166,9 @@ export const AccionesPage: React.FC = () => {
                     </div>
                 </aside>
                 <main className='game-right-column'>
-                    <div className="history-card-frame">
+                    <div className="history-card-frame2">
                         <div className="history-header">
-                            <h3>Historial Profesional</h3>
-                            <span className="history-count">Registros Anuales</span>
+                            <h3 className='historia'>Historial Profesional</h3>
                             
                         </div>
                         <div>

@@ -196,7 +196,8 @@ export const GamePage: React.FC = () => {
   };
 
   const handleAvanzarAño = async () => {
-    if (!user?.id || !run || advancing) return;
+    if (!user?.id || !run || advancing || currentEvento) return;
+    
 
     const currentAge = Number(run.edadActual || 18);
     const isAlreadyFinished =
@@ -439,7 +440,7 @@ export const GamePage: React.FC = () => {
             <img
               src={botonSiguienteAno}
               alt="Boton Avanzar Año"
-              className={`btn-advance-year-img ${advancing ? 'disabled' : ''}`}
+              className={`btn-advance-year-img ${advancing ? 'disabled' : ''}  ${currentEvento ? 'disabled' : ''}  `  }
               onClick={handleAvanzarAño}
             />
             <div className="btn-advance-text-overlay" onClick={handleAvanzarAño}>

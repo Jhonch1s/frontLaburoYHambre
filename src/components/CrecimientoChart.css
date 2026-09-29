@@ -1,20 +1,21 @@
 
     .chart-container {
     width: 100%;
-    min-width: 400px;   /* 👈 evita anchos ridículos */
+    min-width: 400px;  
     min-height: 400px;
     display: block;
 }
 
-.chart-container .axis--x{
-    display: none;
+
+.chart-container svg text {
+  fill: gold !important;
+  margin-left: 100px;
 }
 
-.chart-container .axis--x path.domain {
-  display: none;
+
+.chart-container svg text.title {
+  fill: #ffffff !important; 
 }
 
-.chart-container .axis--x .tick line {
-  display: none;
-}
+
  

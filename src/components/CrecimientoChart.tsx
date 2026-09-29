@@ -4,8 +4,8 @@ import "./CrecimientoChart.css"
 
 interface CrecimientoChartProps {
   chartData: {
-    labels: string[];
-    values: number[];
+    anios: string[];
+    dinero: number[];
   };
 }
 
@@ -17,7 +17,7 @@ export const CrecimientoChart = ({ chartData }: CrecimientoChartProps) => {
 
   useEffect(() => {
     const container = document.getElementById(containerId);
-    if (!container || chartData.labels.length === 0) return;
+    if (!container || chartData.anios.length === 0) return;
 
     container.innerHTML = '';
 
@@ -34,6 +34,8 @@ export const CrecimientoChart = ({ chartData }: CrecimientoChartProps) => {
       fillWeight: 1,
       width: container.clientWidth,
       height: 400,
+
+      margin: { top: 50, right: 20, bottom: 80, left: 80 },
     });
 
     return () => {

@@ -84,7 +84,7 @@ export const RankingModal: React.FC<RankingModalProps> = ({
           <div className="result-modal-container">
             <div className="result-header-row">
               <div className="result-avatar-box">
-                <PlayerAvatar edadActual={finalRun?.edadActual || 65} dineroGenerado={finalRun?.dineroGenerado || 0} />
+                <PlayerAvatar edadActual={finalRun?.edadActual || 65} dineroGenerado={finalRun?.dineroGenerado || 0} estaMuerto={false} />
               </div>
 
               <div className="result-main-details">
