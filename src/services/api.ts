@@ -44,7 +44,6 @@ export function normalizeRun(raw: any): RunTrabajo {
   const runId = getId(raw);
   const userId = typeof raw.user === 'object' ? getId(raw.user) : String(raw.user || raw.usuario || '');
 
-  const esEmpleadoActivo = raw.empleado === true && raw.salarioActual > 0;
   const tieneReferenciaTrabajo = raw.trabajo !== null && raw.trabajo !== undefined;
 
   let trabajoActual = null;

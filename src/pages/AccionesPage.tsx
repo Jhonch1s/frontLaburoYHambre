@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useMemo} from 'react';
+import React, { useEffect, useState } from 'react';
 import { CrecimientoChart } from '../components/CrecimientoChart';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -8,8 +8,6 @@ import { PlayerAvatar } from '../components/PlayerAvatar';
 import { Footer } from '../components/Footer';
 import {
     logoLaburoYHambre,
-    botonSiguienteAno,
-    flechaIcon,
     backendSticker,
     frontendSticker,
     inglesSticker,
@@ -38,18 +36,13 @@ export const AccionesPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [oldRun, setOldRun] = useState<RunTrabajo | null>(null);
     const [habilidades, setHabilidades] = useState<Habilidad[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [showRanking, setShowRanking] = useState<boolean>(false);
-    const [showHistorial, setShowHistorial] = useState<boolean>(false);
 
     useEffect(() => {
         if (!id || !user?.id) return;
 
-        setLoading(true);
         getDetallePartida(id)
             .then(setOldRun)
             .catch(err => console.error('Error cargando detalle:', err))
-            .finally(() => setLoading(false));
 
         getHabilidades(id)
             .then((habs) => setHabilidades([...habs]))
