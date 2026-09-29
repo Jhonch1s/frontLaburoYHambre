@@ -398,7 +398,7 @@ export const GamePage: React.FC = () => {
               onClick={() => setSkillsExpanded(!skillsExpanded)}
               style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
-              <h3 className="skills-title" style={{ margin: 0 }}>Habilidades ({habilidades.length})</h3>
+              <h3 className="skills-title"> Habilidades ({habilidades.length})</h3>
               <span className="accordion-arrow-icon">
                 <img
                   src={flechaIcon}
