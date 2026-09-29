@@ -196,7 +196,8 @@ export const GamePage: React.FC = () => {
   };
 
   const handleAvanzarAño = async () => {
-    if (!user?.id || !run || advancing) return;
+    if (!user?.id || !run || advancing || currentEvento) return;
+    
 
     const currentAge = Number(run.edadActual || 18);
     const isAlreadyFinished =
@@ -364,7 +365,7 @@ export const GamePage: React.FC = () => {
         {/* COLUMNA IZQUIERDA: PANEL DE CONTROL */}
         <aside className="game-left-column">
           {/* Avatar Dinámico */}
-          <PlayerAvatar edadActual={run.edadActual || 18} dineroGenerado={run.dineroGenerado || 0} />
+          <PlayerAvatar edadActual={run.edadActual || 18} dineroGenerado={run.dineroGenerado || 0} estaMuerto={false} />
 
           {/* Tarjeta Trabajo Actual con Marco Simple y Sticker de Empresa */}
           <div className="job-card-frame">
@@ -439,7 +440,7 @@ export const GamePage: React.FC = () => {
             <img
               src={botonSiguienteAno}
               alt="Boton Avanzar Año"
-              className={`btn-advance-year-img ${advancing ? 'disabled' : ''}`}
+              className={`btn-advance-year-img ${advancing ? 'disabled' : ''}  ${currentEvento ? 'disabled' : ''}  `  }
               onClick={handleAvanzarAño}
             />
             <div className="btn-advance-text-overlay" onClick={handleAvanzarAño}>

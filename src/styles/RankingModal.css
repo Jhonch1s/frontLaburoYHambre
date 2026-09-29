@@ -24,11 +24,12 @@
 .ranking-header {
   text-align: center;
   margin-bottom: 1rem;
+  
 }
 
 .ranking-header h2 {
   font-size: 1.7rem;
-  color: var(--accent-gold);
+  color: white;
   margin: 0 0 0.5rem 0;
   text-shadow: 0 2px 6px rgba(0,0,0,0.8);
 }
