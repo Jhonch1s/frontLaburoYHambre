@@ -77,7 +77,7 @@ export const AccionesPage: React.FC = () => {
                 <div className="user-welcome">
                     <span>Bienvenido, <strong>{user?.username || 'Desarrollador'}</strong></span>
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div className="menu-header-actions">
                     <button className="btn-header" onClick={() => navigate('/menu')}>
                         Regresar a menu
                     </button>
@@ -93,7 +93,7 @@ export const AccionesPage: React.FC = () => {
             <div className="game-body-layout">
                 <aside className='game-left-column'>
                     <div className='retrato-jugador' style={{ marginTop: 15 }}>
-                        <PlayerAvatar edadActual={Number(oldRun?.edadActual)} dineroGenerado={Number(oldRun?.dineroGenerado)} estaMuerto={Number(oldRun?.edadActual) < 65} />
+                        <PlayerAvatar edadActual={Number(oldRun?.edadActual)} dineroGenerado={Number(oldRun?.dineroGenerado)} estaMuerto={Boolean(oldRun?.muerto || oldRun?.estado === 'MUERTO')} />
                     </div>
 
                     <div className="job-card-frame">
@@ -106,7 +106,7 @@ export const AccionesPage: React.FC = () => {
                                 <p className="job-title">{oldRun.trabajoActual.puesto}</p>
                                 <p className="job-company">{oldRun.trabajoActual.tier ? `• Tier ${oldRun.trabajoActual.tier}` : ''}</p>
                                 <div className="job-salary-badge">
-                                    Salario Anual: <strong>{oldRun.edadActual < 65 ? "esta muerto lol" : "xddd"}</strong> / año
+                                    Salario Anual: <strong>${(oldRun.salarioActual || oldRun.trabajoActual.salarioAnual || 0).toLocaleString()}</strong> / año
                                 </div>
                             </div>
                         ) : (
