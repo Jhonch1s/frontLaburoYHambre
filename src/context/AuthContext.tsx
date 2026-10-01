@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { Usuario } from '../types';
 import { loginApi, registerApi } from '../services/api';
+import { IS_DESIGN_PREVIEW, previewUser } from '../preview/designPreview';
 
 interface AuthContextType {
   user: Usuario | null;
@@ -40,6 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, [token]);
 
   const login = async (credentials: { email: string; password?: string }) => {
+    if (IS_DESIGN_PREVIEW) return;
     const response = await loginApi(credentials);
     if (response.token) {
       setToken(response.token);
@@ -53,6 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const register = async (data: { username: string; email: string; password?: string }) => {
+    if (IS_DESIGN_PREVIEW) return;
     const response = await registerApi(data);
     if (response.token || response.user) {
       const regUser = response.user || {
@@ -70,14 +73,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setToken(null);
     localStorage.removeItem('user');
     localStorage.removeItem('token');
+    if (IS_DESIGN_PREVIEW) window.location.assign('/login');
   };
 
   return (
     <AuthContext.Provider
       value={{
-        user,
+        user: IS_DESIGN_PREVIEW ? previewUser : user,
         token,
-        isAuthenticated: !!token && !!user,
+        isAuthenticated: IS_DESIGN_PREVIEW || (!!token && !!user),
         login,
         register,
         logout,

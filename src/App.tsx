@@ -5,6 +5,7 @@ import { AuthPage } from './pages/AuthPage';
 import { MainMenuPage } from './pages/MainMenuPage';
 import { GamePage } from './pages/GamePage';
 import { AccionesPage } from './pages/AccionesPage';
+import { IS_DESIGN_PREVIEW } from './preview/designPreview';
 import './App.css';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -17,7 +18,7 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 const PublicOnlyRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  if (isAuthenticated) {
+  if (isAuthenticated && !IS_DESIGN_PREVIEW) {
     return <Navigate to="/menu" replace />;
   }
   return <>{children}</>;

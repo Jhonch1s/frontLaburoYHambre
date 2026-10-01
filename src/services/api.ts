@@ -1,5 +1,13 @@
 import axios from 'axios';
 import type { Usuario, RunTrabajo, Habilidad, Evento, OpcionEvento, Efecto } from '../types';
+import {
+  IS_DESIGN_PREVIEW,
+  advancePreviewRun,
+  createPreviewRun,
+  getPreviewRun,
+  previewRanking,
+  previewSkills,
+} from '../preview/designPreview';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
@@ -12,6 +20,9 @@ export const api = axios.create({
 
 // Interceptor para adjuntar Authorization: Bearer <token>
 api.interceptors.request.use((config) => {
+  if (IS_DESIGN_PREVIEW) {
+    return Promise.reject(new Error('Las llamadas al backend están deshabilitadas en la vista de diseño local.'));
+  }
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -110,6 +121,7 @@ export async function registerApi(data: { username: string; email: string; passw
 
 // --- RUN API ---
 export async function getRunActiva(userId: string): Promise<RunTrabajo | null> {
+  if (IS_DESIGN_PREVIEW) return getPreviewRun();
   const res = await api.get(`/runTrabajo/obtenerRunTrabajoActivo/${userId}`);
   if (res.data) {
     const rawRun = Array.isArray(res.data) ? res.data[0] : res.data;
@@ -121,17 +133,20 @@ export async function getRunActiva(userId: string): Promise<RunTrabajo | null> {
 }
 
 export async function crearRun(userId: string, estudioInicialId?: string | number): Promise<RunTrabajo> {
+  if (IS_DESIGN_PREVIEW) return createPreviewRun();
   const res = await api.post(`/runTrabajo/iniciarRun/${userId}`, { estudioInicialId });
   return normalizeRun(res.data);
 }
 
 export async function getDetalleRun(userId: string): Promise<RunTrabajo[]> {
+  if (IS_DESIGN_PREVIEW) return [getPreviewRun()];
   const res = await api.get(`/runTrabajo/obtenerRunTrabajo/${userId}`);
   const list = Array.isArray(res.data) ? res.data : [res.data];
   return list.map(normalizeRun);
 }
 
 export async function aumentarAño(userId: string, runId?: string): Promise<RunTrabajo> {
+  if (IS_DESIGN_PREVIEW) return advancePreviewRun();
   try {
     if (runId) {
       await api.patch(`/runTrabajo/aumentarAnio/${runId}/${userId}`).catch(() => {});
@@ -155,6 +170,7 @@ export async function aumentarAño(userId: string, runId?: string): Promise<RunT
 
 // --- HABILIDADES API ---
 export async function getHabilidades(runId: string): Promise<Habilidad[]> {
+  if (IS_DESIGN_PREVIEW) return [...previewSkills];
   const res = await api.get(`/habilidadJugador/obtenerHabilidades/${runId}`);
   if (res.data && Array.isArray(res.data)) {
     return res.data.map((item: any) => {
@@ -173,6 +189,7 @@ export async function getHabilidades(runId: string): Promise<Habilidad[]> {
 
 // --- EVENTOS, OPCIONES & EFECTOS API ---
 export async function getEfectosDeOpcion(opcionId: string): Promise<Efecto[]> {
+  if (IS_DESIGN_PREVIEW) return [];
   const res = await api.get(`/efectoOpcion/opcion/${opcionId}`);
   if (res.data && Array.isArray(res.data)) {
     return res.data
@@ -190,6 +207,7 @@ export async function getEfectosDeOpcion(opcionId: string): Promise<Efecto[]> {
 }
 
 export async function evaluarEvento(_runId?: string, currentRun?: RunTrabajo | null): Promise<Evento | null> {
+  if (IS_DESIGN_PREVIEW) return null;
   if (!currentRun) return null;
 
   const anio = currentRun.anioActual || currentRun.añoActual || 2027;
@@ -314,6 +332,7 @@ export async function tomarDecision(
   eventoId: string,
   opcionId: string
 ): Promise<{ success: boolean; runActualizada?: RunTrabajo }> {
+  if (IS_DESIGN_PREVIEW) return { success: true, runActualizada: getPreviewRun() };
   try {
     const res = await api.post(`/opcion/tomarOpcion/${eventoId}/${runId}`, { opcionId });
     if (res.data) {
@@ -327,6 +346,7 @@ export async function tomarDecision(
 
 // --- RANKING API ---
 export async function getRankingGlobal(): Promise<any[]> {
+  if (IS_DESIGN_PREVIEW) return [...previewRanking];
   const res = await api.get('/ranking');
   if (res.data && Array.isArray(res.data)) {
     return res.data.map((item: any, idx: number) => {
@@ -344,6 +364,16 @@ export async function getRankingGlobal(): Promise<any[]> {
 }
 
 export async function getPartidasAnteriores(idUsuario: string): Promise<any[]>{
+  if (IS_DESIGN_PREVIEW) {
+    return [{
+      id: getPreviewRun().id,
+      username: 'Alex Dev',
+      fecha: '2026-09-30',
+      edadActual: getPreviewRun().edadActual,
+      dineroGenerado: getPreviewRun().dineroGenerado,
+      estado: getPreviewRun().estado,
+    }];
+  }
   const res = await api.get(`/runTrabajo/obtenerRunTrabajo/${idUsuario}`);
 
   const raw = res.data;
@@ -371,6 +401,7 @@ export async function getPartidasAnteriores(idUsuario: string): Promise<any[]>{
 
 
 export async function getDetallePartida(idRunTrabajo: string): Promise<RunTrabajo>{
+  if (IS_DESIGN_PREVIEW) return getPreviewRun();
   const res = await api.get(`/runTrabajo/obtenerRunTrabajoDetalle/${idRunTrabajo}`);
   console.log(idRunTrabajo)
   console.log(res);
