@@ -561,3 +561,101 @@
   opacity: 0.45;
   cursor: not-allowed;
 }
+
+@media (max-width: 600px) {
+  .history-card-frame,
+  .history-card-frame2 {
+    padding: 4.5rem 1.2rem 4rem 16%;
+  }
+
+  .history-header {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .history-header h3 {
+    font-size: 1rem;
+    margin: 0;
+  }
+
+  .history-count {
+    font-size: 0.72rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  .history-table {
+    min-width: 0;
+    font-size: 0.8rem;
+  }
+
+  .history-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .history-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.25rem 0.5rem;
+    padding: 0.6rem;
+    margin-bottom: 0.65rem;
+    background: rgba(255, 251, 242, 0.68);
+    border: 1px solid rgba(43, 34, 26, 0.16);
+    border-radius: 5px;
+  }
+
+  .history-table td {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    min-width: 0;
+    padding: 0;
+    border: 0 !important;
+    overflow-wrap: anywhere;
+  }
+
+  .history-table td::before {
+    content: attr(data-label);
+    color: #67584b;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .history-table .role-cell {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .history-table .accumulated-cell {
+    grid-column: 1 / -1;
+  }
+
+  .history-table .role-cell-content {
+    align-items: flex-start;
+  }
+
+  .pagination-bar {
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    padding-inline: 0;
+  }
+
+  .pagination-info {
+    order: -1;
+    width: 100%;
+    text-align: center;
+    font-size: 0.75rem;
+  }
+
+  .btn-pagination-azul {
+    min-width: 86px !important;
+    height: 38px !important;
+    padding: 0.4rem 0.7rem !important;
+    font-size: 0.8rem !important;
+  }
+}

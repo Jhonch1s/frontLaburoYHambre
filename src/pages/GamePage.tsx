@@ -474,15 +474,15 @@ export const GamePage: React.FC = () => {
                 <tbody>
                   {currentHistorialPage.map((row) => (
                     <tr key={row.edad} className={row.edad === run.edadActual ? 'current-age-row' : ''}>
-                      <td className="age-cell">{row.edad}</td>
-                      <td className="role-cell">
+                      <td className="age-cell" data-label="Edad">{row.edad}</td>
+                      <td className="role-cell" data-label="Empresa y puesto">
                         <div className="role-cell-content">
                           <img src={getCompanySticker(row.empresaYPuesto)} alt="Empresa Sticker" className="history-company-sticker" />
                           <span>{row.empresaYPuesto}</span>
                         </div>
                       </td>
-                      <td className="salary-cell">${row.salarioAnual.toLocaleString()}</td>
-                      <td className="accumulated-cell">${row.dineroAcumulado.toLocaleString()}</td>
+                      <td className="salary-cell" data-label="Salario anual">${row.salarioAnual.toLocaleString()}</td>
+                      <td className="accumulated-cell" data-label="Dinero acumulado">${row.dineroAcumulado.toLocaleString()}</td>
                     </tr>
                   ))}
                 </tbody>
