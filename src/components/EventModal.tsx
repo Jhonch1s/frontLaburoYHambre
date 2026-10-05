@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Evento, OpcionEvento } from '../types';
+import type { Evento } from '../types';
 
 interface EventModalProps {
   evento: Evento | null;
@@ -10,27 +10,6 @@ export const EventModal: React.FC<EventModalProps> = ({ evento, onSelectOption }
   if (!evento) return null;
 
   const isMuerte = evento.tipo === 'MUERTE';
-
-  const renderEfectos = (opcion: OpcionEvento) => {
-    // Para dilemas, riesgos, catástrofes y elecciones familiares no mostramos el resultado de antemano
-    if (
-      evento.tipo === 'EVENTO_RANDOM' ||
-      evento.tipo === 'EMPRENDIMIENTO' ||
-      evento.tipo === 'INVERSION' ||
-      evento.tipo === 'CATASTROFE' ||
-      evento.tipo === 'EVENTO_FAMILIAR' ||
-      /conectarlo|vacaciones|casarte|divorcio|bot|startup|inversión|pendrive|udemy|pala|correo|boda/i.test(opcion.texto || '')
-    ) {
-      return '';
-    }
-
-    if (opcion.efectos && opcion.efectos.length > 0) {
-      return opcion.efectos
-        .map((ef) => `${ef.valor > 0 ? '+' : ''}${ef.valor} ${ef.objetivo}`)
-        .join(', ');
-    }
-    return '';
-  };
 
   return (
     <div className="modal-overlay">

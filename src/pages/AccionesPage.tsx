@@ -69,6 +69,10 @@ export const AccionesPage: React.FC = () => {
     const currentCompanySticker = getCompanySticker(oldRun?.trabajoActual?.empresa, oldRun?.trabajoActual?.puesto);
     console.log(oldRun?.muerto)
 
+    const isDead = Boolean(oldRun?.muerto || oldRun?.estado === 'MUERTO');
+    const isRetired = Boolean(oldRun && (oldRun.edadActual >= 65 || ['FINALIZADA', 'Completada'].includes(oldRun.estado)));
+    const runStatus = isDead ? 'FALLECIDO' : isRetired ? 'JUBILADO' : 'EN CURSO';
+
 
     return (
         <div className="menu-container">
@@ -96,11 +100,11 @@ export const AccionesPage: React.FC = () => {
                             borderRadius: '20px',
                             fontWeight: 'bold',
                             fontSize: '1rem',
-                            background: oldRun.muerto || oldRun.estado === 'MUERTO' || (oldRun.edadActual && oldRun.edadActual < 65) ? '#991b1b' : '#065f46',
+                            background: isDead ? '#991b1b' : isRetired ? '#065f46' : '#1e40af',
                             color: '#ffffff',
                             border: '1px solid rgba(255,255,255,0.2)'
                         }}>
-                            Estado: {oldRun.muerto || oldRun.estado === 'MUERTO' || (oldRun.edadActual && oldRun.edadActual < 65) ? 'FALLECIDO' : 'JUBILADO'} ({oldRun.edadActual || 65} Años)
+                            Estado: {runStatus} ({oldRun.edadActual || 18} Años)
                         </span>
                         <span style={{
                             padding: '6px 16px',
@@ -120,15 +124,15 @@ export const AccionesPage: React.FC = () => {
                 <aside className='game-left-column'>
                     <div className='retrato-jugador' style={{ marginTop: 15 }}>
                         <PlayerAvatar
-                            edadActual={Number(oldRun?.edadActual || 65)}
+                            edadActual={Number(oldRun?.edadActual || 18)}
                             dineroGenerado={Number(oldRun?.dineroGenerado || 0)}
-                            estaMuerto={Boolean(oldRun?.muerto || oldRun?.estado === 'MUERTO' || (oldRun?.edadActual && oldRun.edadActual < 65))}
+                            estaMuerto={isDead}
                         />
                     </div>
 
                     <div className="job-card-frame">
                         <div className="job-card-header">
-                            <h3>Estado Laboral Final</h3>
+                            <h3>{isRetired || isDead ? 'Estado Laboral Final' : 'Estado Laboral y Empresa'}</h3>
                             <img src={currentCompanySticker} alt="Empresa Sticker" className="company-sticker-img" />
                         </div>
                         {oldRun?.trabajoActual ? (
@@ -141,7 +145,9 @@ export const AccionesPage: React.FC = () => {
                             </div>
                         ) : (
                             <div className="unemployed-badge">
-                                <p className="job-title text-danger" style={{ color: '#0284c7' }}>Estudiante Tecnólogo en Informática</p>
+                                <p className="job-title text-danger" style={{ color: oldRun && oldRun.edadActual <= 18 ? '#0284c7' : '#ef4444' }}>
+                                    {oldRun && oldRun.edadActual <= 18 ? 'Estudiante Tecnólogo en Informática' : 'Sin trabajo'}
+                                </p>
                                 <p className="job-company">Sin empleo activo</p>
                                 <div className="job-salary-badge salary-zero">
                                     Ingresos Anuales: <strong>$0 / año</strong>

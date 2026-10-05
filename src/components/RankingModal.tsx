@@ -37,7 +37,7 @@ export const RankingModal: React.FC<RankingModalProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const { user } = useAuth();
 
-  const esMuerto = finalRun?.estado === 'MUERTO' || finalRun?.muerto || Boolean(finalRun?.edadActual && finalRun.edadActual < 65);
+  const esMuerto = finalRun?.estado === 'MUERTO' || finalRun?.muerto;
   const esResultado = isJubilacion || esMuerto;
 
   useEffect(() => {

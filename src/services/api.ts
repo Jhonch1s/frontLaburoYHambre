@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { Usuario, RunTrabajo, Habilidad, Evento, OpcionEvento, Efecto } from '../types';
+import type { Usuario, RunTrabajo, Habilidad, Evento, Efecto } from '../types';
 import {
   IS_DESIGN_PREVIEW,
   advancePreviewRun,
