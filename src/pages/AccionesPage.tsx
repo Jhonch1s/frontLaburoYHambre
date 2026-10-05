@@ -88,17 +88,47 @@ export const AccionesPage: React.FC = () => {
             </header>
 
             <div style={{ textAlign: 'center', marginTop: 10 }}>
-                <h1>Resumen de la partida</h1>
+                <h1>Resumen de la Partida</h1>
+                {oldRun && (
+                    <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', alignItems: 'center', margin: '15px 0' }}>
+                        <span style={{
+                            padding: '6px 16px',
+                            borderRadius: '20px',
+                            fontWeight: 'bold',
+                            fontSize: '1rem',
+                            background: oldRun.muerto || oldRun.estado === 'MUERTO' || (oldRun.edadActual && oldRun.edadActual < 65) ? '#991b1b' : '#065f46',
+                            color: '#ffffff',
+                            border: '1px solid rgba(255,255,255,0.2)'
+                        }}>
+                            Estado: {oldRun.muerto || oldRun.estado === 'MUERTO' || (oldRun.edadActual && oldRun.edadActual < 65) ? 'FALLECIDO' : 'JUBILADO'} ({oldRun.edadActual || 65} Años)
+                        </span>
+                        <span style={{
+                            padding: '6px 16px',
+                            borderRadius: '20px',
+                            fontWeight: 'bold',
+                            fontSize: '1rem',
+                            background: '#1e293b',
+                            color: '#10b981',
+                            border: '1px solid #334155'
+                        }}>
+                            Patrimonio Final: ${(oldRun.dineroGenerado || 0).toLocaleString()} USD
+                        </span>
+                    </div>
+                )}
             </div>
             <div className="game-body-layout">
                 <aside className='game-left-column'>
                     <div className='retrato-jugador' style={{ marginTop: 15 }}>
-                        <PlayerAvatar edadActual={Number(oldRun?.edadActual)} dineroGenerado={Number(oldRun?.dineroGenerado)} estaMuerto={Boolean(oldRun?.muerto || oldRun?.estado === 'MUERTO')} />
+                        <PlayerAvatar
+                            edadActual={Number(oldRun?.edadActual || 65)}
+                            dineroGenerado={Number(oldRun?.dineroGenerado || 0)}
+                            estaMuerto={Boolean(oldRun?.muerto || oldRun?.estado === 'MUERTO' || (oldRun?.edadActual && oldRun.edadActual < 65))}
+                        />
                     </div>
 
                     <div className="job-card-frame">
                         <div className="job-card-header">
-                            <h3>Estado Laboral y Empresa</h3>
+                            <h3>Estado Laboral Final</h3>
                             <img src={currentCompanySticker} alt="Empresa Sticker" className="company-sticker-img" />
                         </div>
                         {oldRun?.trabajoActual ? (
@@ -106,12 +136,12 @@ export const AccionesPage: React.FC = () => {
                                 <p className="job-title">{oldRun.trabajoActual.puesto}</p>
                                 <p className="job-company">{oldRun.trabajoActual.tier ? `• Tier ${oldRun.trabajoActual.tier}` : ''}</p>
                                 <div className="job-salary-badge">
-                                    Salario Anual: <strong>${(oldRun.salarioActual || oldRun.trabajoActual.salarioAnual || 0).toLocaleString()}</strong> / año
+                                    Salario Final: <strong>${(oldRun.salarioActual || oldRun.trabajoActual.salarioAnual || 0).toLocaleString()}</strong> / año
                                 </div>
                             </div>
                         ) : (
                             <div className="unemployed-badge">
-                                <p className="job-title text-danger">Sin trabajo</p>
+                                <p className="job-title text-danger" style={{ color: '#0284c7' }}>Estudiante Tecnólogo en Informática</p>
                                 <p className="job-company">Sin empleo activo</p>
                                 <div className="job-salary-badge salary-zero">
                                     Ingresos Anuales: <strong>$0 / año</strong>
@@ -124,13 +154,9 @@ export const AccionesPage: React.FC = () => {
                     <div className="skills-card-frame">
                         <div
                             className="skills-accordion-header"
-
                             style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                         >
                             <h3 className="skills-title" style={{ margin: 0 }}>Habilidades ({habilidades.length})</h3>
-                            <span className="accordion-arrow-icon">
-
-                            </span>
                         </div>
 
                         <div className="skills-list">
@@ -162,7 +188,6 @@ export const AccionesPage: React.FC = () => {
                     <div className="history-card-frame2">
                         <div className="history-header">
                             <h3 className='historia'>Historial Profesional</h3>
-                            
                         </div>
                         <div>
                             <CrecimientoChart chartData={chartData}></CrecimientoChart>

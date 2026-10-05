@@ -101,10 +101,12 @@ export const GamePage: React.FC = () => {
     if (targetRun && getId(targetRun) && !isNew) {
       setRun(targetRun);
       const runId = getId(targetRun);
-      getHabilidades(runId).then((habs) => setHabilidades([...habs]));
+      if (runId) {
+        getHabilidades(runId).then((habs) => setHabilidades([...habs]));
+      }
       rebuildHistorial(targetRun);
-      if (targetRun.edadActual >= 65 || targetRun.estado === 'Completada' || targetRun.estado === 'FINALIZADA') {
-        setCurrentEvento(null);
+      setCurrentEvento(null);
+      if (targetRun.edadActual >= 65 || targetRun.estado === 'Completada' || targetRun.estado === 'FINALIZADA' || targetRun.estado === 'MUERTO') {
         setShowJubilacionModal(true);
       }
       setLoading(false);
@@ -115,7 +117,7 @@ export const GamePage: React.FC = () => {
           if (!current || current.estado === 'FINALIZADA' || current.estado === 'Completada' || current.estado === 'MUERTO') {
             const allRuns = await getDetalleRun(user.id || '');
             const lastRun = allRuns[0];
-            if (lastRun && (lastRun.edadActual >= 65 || lastRun.estado === 'Completada' || lastRun.estado === 'FINALIZADA') && !isNew) {
+            if (lastRun && (lastRun.edadActual >= 65 || lastRun.estado === 'Completada' || lastRun.estado === 'FINALIZADA' || lastRun.estado === 'MUERTO') && !isNew) {
               setRun(lastRun);
               const runId = getId(lastRun);
               if (runId) {
@@ -140,8 +142,8 @@ export const GamePage: React.FC = () => {
           }
 
           rebuildHistorial(current);
-          if (current && (current.edadActual >= 65 || current.estado === 'Completada' || current.estado === 'FINALIZADA')) {
-            setCurrentEvento(null);
+          setCurrentEvento(null);
+          if (current && (current.edadActual >= 65 || current.estado === 'Completada' || current.estado === 'FINALIZADA' || current.estado === 'MUERTO')) {
             setShowJubilacionModal(true);
           }
         })
@@ -355,7 +357,13 @@ export const GamePage: React.FC = () => {
 
           <div className="hud-pill">
             <span className="hud-label">Trabajo Actual</span>
-            <span className="hud-value">{run.trabajoActual ? run.trabajoActual.puesto : 'DESPEDIDO / Sin empleo'}</span>
+            <span className="hud-value">
+              {run.trabajoActual
+                ? run.trabajoActual.puesto
+                : Number(run.edadActual || 18) <= 18
+                ? 'Estudiante Tecnólogo en Informática en UTEC'
+                : 'Desempleado (En búsqueda laboral)'}
+            </span>
           </div>
         </div>
       </header>
@@ -381,10 +389,18 @@ export const GamePage: React.FC = () => {
                   Salario Anual: <strong>${(run.salarioActual || run.trabajoActual.salarioAnual || 0).toLocaleString()}</strong> / año
                 </div>
               </div>
+            ) : Number(run.edadActual || 18) <= 18 ? (
+              <div className="unemployed-badge">
+                <p className="job-title text-danger" style={{ color: '#0284c7' }}>Estudiante Tecnólogo en Informática</p>
+                <p className="job-company">UTEC - Universidad Tecnológica</p>
+                <div className="job-salary-badge salary-zero">
+                  Ingresos Anuales: <strong>$0 / año</strong>
+                </div>
+              </div>
             ) : (
               <div className="unemployed-badge">
-                <p className="job-title text-danger">Sin trabajo</p>
-                <p className="job-company">Sin empleo activo</p>
+                <p className="job-title text-danger" style={{ color: '#ef4444' }}>DESPEDIDO / En búsqueda laboral</p>
+                <p className="job-company">En búsqueda de empleo IT</p>
                 <div className="job-salary-badge salary-zero">
                   Ingresos Anuales: <strong>$0 / año</strong>
                 </div>
@@ -414,7 +430,7 @@ export const GamePage: React.FC = () => {
               onClick={() => setSkillsExpanded(!skillsExpanded)}
               style={{ cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
             >
-              <h3 className="skills-title" style={{ margin: 0 }}>Habilidades ({habilidades.length})</h3>
+              <h3 className="skills-title"> Habilidades ({habilidades.length})</h3>
               <span className="accordion-arrow-icon">
                 <img
                   src={flechaIcon}
@@ -499,7 +515,7 @@ export const GamePage: React.FC = () => {
               </button>
 
               <span className="pagination-info">
-                Página {currentPage} de {totalPages} ({historial.length} años)
+                Página {currentPage} de {totalPages}
               </span>
 
               <button

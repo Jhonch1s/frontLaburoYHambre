@@ -215,10 +215,11 @@
   font-size: 1.15rem;
   margin: 0;
   font-weight: 800;
-  color: #1c1917;
+  color: #fb6565 !important;
+  padding-left: 30px;
 }
 
-.skills-title{
+.skills-title {
   color: gold;
 }
 

@@ -90,7 +90,7 @@
 }
 
 .result-stat-label {
-  color: var(--bg-dark);
+  color: white;
   font-weight: 700;
 }
 
@@ -125,7 +125,7 @@
 .result-skills-title {
   font-size: 1rem;
   margin: 0;
-  color: #000000;
+  color: #ffffff;
   font-weight: 800;
   font-family: var(--font-heading);
 }

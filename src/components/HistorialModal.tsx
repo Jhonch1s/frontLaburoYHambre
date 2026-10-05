@@ -98,7 +98,7 @@ export const HistorialModal: React.FC<HistorialModalProps> = ({
                 <div className="summary-pill">
                   <span className="summary-label">Estado Final / Edad</span>
                   <span className="summary-value">
-                    {finalRun.edadActual} Años ({finalRun.edadActual < 65 ? 'Muerto': 'Jubilado'})
+                    {finalRun.edadActual} Años ({finalRun.muerto || finalRun.estado === 'MUERTO' || finalRun.edadActual < 65 ? 'Fallecido' : 'Jubilado'})
                   </span>
                 </div>
               </div>

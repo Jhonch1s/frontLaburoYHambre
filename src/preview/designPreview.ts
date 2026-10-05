@@ -1,7 +1,7 @@
 import type { Habilidad, RunTrabajo, Usuario } from '../types';
 
 // Vista temporal para diseñar pantallas con Vite. En un build publicado DEV es false.
-export const IS_DESIGN_PREVIEW = import.meta.env.DEV;
+export const IS_DESIGN_PREVIEW = import.meta.env.VITE_DESIGN_PREVIEW === 'true';
 
 export const previewUser: Usuario = {
   id: 'design-preview-user',
