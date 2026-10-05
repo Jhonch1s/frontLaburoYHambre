@@ -58,7 +58,7 @@ export function normalizeRun(raw: any): RunTrabajo {
   const tieneReferenciaTrabajo = raw.trabajo !== null && raw.trabajo !== undefined;
 
   let trabajoActual = null;
-  const esEmpleado = raw.empleado !== false && raw.trabajo !== null;
+  const esEmpleado = raw.empleado === true && raw.trabajo !== null && raw.trabajo !== undefined;
 
   if (tieneReferenciaTrabajo && raw.trabajo && typeof raw.trabajo === 'object') {
     trabajoActual = {
@@ -67,14 +67,6 @@ export function normalizeRun(raw: any): RunTrabajo {
       empresa: raw.trabajo.empresa || 'Empresa Tech',
       tier: raw.trabajo.tier || 'Junior',
       salarioAnual: raw.trabajo.salarioBase || raw.trabajo.salarioAnual || raw.salarioActual || 10000,
-    };
-  } else if (esEmpleado && raw.salarioActual > 0) {
-    trabajoActual = {
-      id: 'job-active',
-      puesto: 'Pasante Trainee de Informática',
-      empresa: 'Startup Tech Innovadora',
-      tier: 'Junior',
-      salarioAnual: raw.salarioActual,
     };
   }
 
@@ -91,8 +83,8 @@ export function normalizeRun(raw: any): RunTrabajo {
     estado: raw.estado === 'MUERTO' || raw.muerto ? 'MUERTO' : (raw.estado?.toLowerCase().includes('completa') || raw.estado?.toLowerCase().includes('finaliza') || Number(raw.edadActual) >= 65) ? 'FINALIZADA' : raw.estado === 'En proceso' ? 'ACTIVA' : raw.estado || 'ACTIVA',
     muerto: raw.muerto || raw.estado === 'MUERTO',
     esSeniorInterno: raw.esSeniorInterno || false,
-    trabajoActual: tieneReferenciaTrabajo ? trabajoActual : null,
-    estudioNombre: 'Tecnólogo en Informática',
+    trabajoActual: esEmpleado ? trabajoActual : null,
+    estudioNombre: 'Tecnólogo en Informática en UTEC',
     decisionesTomadas: raw.decisionesTomadas || [],
     historialAnual: raw.historialAnual || [],
   };
@@ -206,124 +198,34 @@ export async function getEfectosDeOpcion(opcionId: string): Promise<Efecto[]> {
   return [];
 }
 
-export async function evaluarEvento(_runId?: string, currentRun?: RunTrabajo | null): Promise<Evento | null> {
+export async function evaluarEvento(runId?: string, currentRun?: RunTrabajo | null): Promise<Evento | null> {
   if (IS_DESIGN_PREVIEW) return null;
-  if (!currentRun) return null;
+  const targetId = runId || (currentRun ? getId(currentRun) : '');
+  if (!targetId) return null;
 
-  const anio = currentRun.anioActual || currentRun.añoActual || 2027;
-  const edad = currentRun.edadActual || 18;
-  const esEmpleado = !!currentRun.trabajoActual;
-  const dineroActual = typeof currentRun.dineroGenerado === 'number' ? currentRun.dineroGenerado : 0;
-
-  // 1. Ciclo de eventos estricto cada 3 a 4 años (sin excepciones de despedido)
-  const transcurridos = anio - 2027;
-  const esCicloAnos = transcurridos > 0 && transcurridos % 3 === 0;
-
-  if (!esCicloAnos) {
-    return null;
-  }
-
-  const res = await api.get('/evento/ver');
-  if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-    let eventosDB = res.data;
-
-    // Obtener lista de IDs de eventos ya resueltos en esta partida
-    const eventosResueltosIds = (currentRun.decisionesTomadas || [])
-      .map((d: any) => {
-        if (typeof d === 'string') return d;
-        if (d.evento) return getId(d.evento) || String(d.evento);
-        return getId(d);
-      })
-      .filter(Boolean);
-
-    // A. Filtrar eventos por rango de edad
-    eventosDB = eventosDB.filter((ev: any) => {
-      const min = typeof ev.edadMinima === 'number' ? ev.edadMinima : 18;
-      const max = typeof ev.edadMaxima === 'number' ? ev.edadMaxima : 65;
-      return edad >= min && edad <= max;
-    });
-
-    // B. Filtrar eventos ya resueltos a menos que sean explícitamente repetibles
-    eventosDB = eventosDB.filter((ev: any) => {
-      const evId = getId(ev);
-      const yaResuelto = eventosResueltosIds.includes(evId);
-      const esRepetible = ev.repetible === true || String(ev.repetible) === 'true';
-      if (yaResuelto && !esRepetible) {
-        return false;
-      }
-      return true;
-    });
-
-    // C. Filtrar por requisitos de trabajo
-    eventosDB = eventosDB.filter((ev: any) => {
-      if (ev.reqTrabajo === true && !esEmpleado) {
-        return false;
-      }
-      return true;
-    });
-
-    // D. Filtrar gastos por fondos suficientes
-    eventosDB = eventosDB.filter((ev: any) => {
-      if (ev.tipo === 'GASTO' || (typeof ev.bonificacion === 'number' && ev.bonificacion < 0)) {
-        const costo = Math.abs(ev.bonificacion || 0);
-        if (dineroActual < costo) {
-          return false;
-        }
-      }
-      return true;
-    });
-
-    // E. Evaluar probabilidad real del evento
-    eventosDB = eventosDB.filter((ev: any) => {
-      const prob = typeof ev.probabilidad === 'number' ? ev.probabilidad : 0.5;
-      return Math.random() <= prob;
-    });
-
-    if (eventosDB.length === 0) return null;
-
-    // F. Si está despedido, priorizar ofertas laborales si existen en la selección
-    if (!esEmpleado) {
-      const eventosEmpleo = eventosDB.filter((ev: any) => ev.tipo === 'DESEMPLEO');
-      if (eventosEmpleo.length > 0) {
-        eventosDB = eventosEmpleo;
-      }
+  try {
+    const res = await api.get(`/evento/evaluar/${targetId}`);
+    if (res.data && (res.data.id || res.data._id)) {
+      return {
+        id: getId(res.data),
+        _id: getId(res.data),
+        titulo: res.data.titulo,
+        descripcion: res.data.descripcion,
+        tipo: res.data.tipo,
+        bonificacion: res.data.bonificacion,
+        probabilidad: res.data.probabilidad,
+        opciones: (res.data.opciones || []).map((op: any) => ({
+          id: getId(op),
+          _id: getId(op),
+          evento: getId(res.data),
+          texto: op.texto || op.titulo || 'Seleccionar opción',
+          efectos: op.efectos || [],
+        })),
+      };
     }
-
-    const selectedIndex = Math.floor(Math.random() * eventosDB.length);
-    const rawEv = eventosDB[selectedIndex];
-    const evId = getId(rawEv);
-
-    const opcionesRes = await api.get(`/opcion/evento/${evId}/opciones`);
-    let opcionesDB: OpcionEvento[] = [];
-
-    if (opcionesRes.data && Array.isArray(opcionesRes.data)) {
-      opcionesDB = await Promise.all(
-        opcionesRes.data.map(async (op: any) => {
-          const opId = getId(op);
-          const efectos = await getEfectosDeOpcion(opId);
-          return {
-            id: opId,
-            _id: opId,
-            evento: evId,
-            texto: op.texto || op.titulo || 'Seleccionar opción',
-            efectos,
-          };
-        })
-      );
-    }
-
-    return {
-      id: evId,
-      _id: evId,
-      titulo: rawEv.titulo,
-      descripcion: rawEv.descripcion,
-      tipo: rawEv.tipo,
-      bonificacion: rawEv.bonificacion,
-      probabilidad: rawEv.probabilidad,
-      opciones: opcionesDB,
-    };
+  } catch (err) {
+    console.warn('Error evaluando evento en backend:', err);
   }
-
   return null;
 }
 

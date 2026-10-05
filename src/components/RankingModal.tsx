@@ -37,7 +37,7 @@ export const RankingModal: React.FC<RankingModalProps> = ({
   const [loading, setLoading] = useState<boolean>(true);
   const { user } = useAuth();
 
-  const esMuerto = finalRun?.estado === 'MUERTO' || finalRun?.muerto;
+  const esMuerto = finalRun?.estado === 'MUERTO' || finalRun?.muerto || Boolean(finalRun?.edadActual && finalRun.edadActual < 65);
   const esResultado = isJubilacion || esMuerto;
 
   useEffect(() => {
@@ -84,7 +84,7 @@ export const RankingModal: React.FC<RankingModalProps> = ({
           <div className="result-modal-container">
             <div className="result-header-row">
               <div className="result-avatar-box">
-                <PlayerAvatar edadActual={finalRun?.edadActual || 65} dineroGenerado={finalRun?.dineroGenerado || 0} estaMuerto={false} />
+                <PlayerAvatar edadActual={finalRun?.edadActual || 65} dineroGenerado={finalRun?.dineroGenerado || 0} estaMuerto={Boolean(esMuerto)} />
               </div>
 
               <div className="result-main-details">

@@ -24,10 +24,9 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({ edadActual, dineroGe
   const isAdulto = edadActual > 30 && edadActual <= 50;
 
 
-  // 2. Determinar Nivel Económico (Pobre: < 500k, Moderado: 500k - 2M, Rico: > 2M)
+  // 2. Determinar Nivel Económico (Pobre: < 500k, Moderado: 500k - 10M, Rico: >= 10M)
   const isPobre = dineroGenerado < 500000;
-  const isModerado = dineroGenerado >= 500000 && dineroGenerado <= 2000000;
-  // const isRico = dineroGenerado > 2000000;
+  const isModerado = dineroGenerado >= 500000 && dineroGenerado < 10000000;
 
   // 3. Selección de Asset de Personaje .NET
   let avatarImg = jovenPobre;
@@ -38,11 +37,11 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({ edadActual, dineroGe
     avatarImg = muerto;
     ageLabel = 'Falleció a los '+edadActual+' años';
     if (isPobre) {
-      wealthLabel = 'Murio pobre (< $500k)';
+      wealthLabel = 'Murió pobre (< $500k)';
     } else if (isModerado) {
-      wealthLabel = 'Tenia Potencial ($500k - $2M)';
+      wealthLabel = 'Tenía Potencial ($500k - $10M)';
     } else {
-      wealthLabel = 'Ni pudo usar la plata xddd (> $2M)';
+      wealthLabel = 'Ni pudo usar la plata xddd (>= $10M)';
     }
   } else {
     if (isJoven) {
@@ -51,10 +50,10 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({ edadActual, dineroGe
         wealthLabel = 'Desarrollador Inicial (< $500k)';
       } else if (isModerado) {
         avatarImg = jovenModerado;
-        wealthLabel = 'Ingresos Moderados ($500k - $2M)';
+        wealthLabel = 'Ingresos Moderados ($500k - $10M)';
       } else {
         avatarImg = jovenRico;
-        wealthLabel = 'Joven Promesa Tech (> $2M)';
+        wealthLabel = 'Joven Promesa Tech (>= $10M)';
       }
     } else if (isAdulto) {
       ageLabel = 'Adulto (31-50 Años)';
@@ -63,10 +62,10 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({ edadActual, dineroGe
         wealthLabel = 'Desarrollador Cansado (< $500k)';
       } else if (isModerado) {
         avatarImg = adultoModerado;
-        wealthLabel = 'Profesional Estabilizado ($500k - $2M)';
+        wealthLabel = 'Profesional Estabilizado ($500k - $10M)';
       } else {
         avatarImg = adultoRico;
-        wealthLabel = 'Empresario / Senior Lead (> $2M)';
+        wealthLabel = 'Empresario / Senior Lead (>= $10M)';
       }
     } else {
       ageLabel = 'Veterano (51-65 Años)';
@@ -75,10 +74,10 @@ export const PlayerAvatar: React.FC<PlayerAvatarProps> = ({ edadActual, dineroGe
         wealthLabel = 'Veterano Ajustado (< $500k)';
       } else if (isModerado) {
         avatarImg = viejoModerado;
-        wealthLabel = 'Jubilado Cómodo ($500k - $2M)';
+        wealthLabel = 'Jubilado Cómodo ($500k - $10M)';
       } else {
         avatarImg = viejoRico;
-        wealthLabel = 'Magnate Tech Senior (> $2M)';
+        wealthLabel = 'Magnate Tech Senior (>= $10M)';
       }
     }
   }
