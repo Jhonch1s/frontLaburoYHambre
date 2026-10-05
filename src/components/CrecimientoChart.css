@@ -1,21 +1,11 @@
-
-    .chart-container {
-    width: 100%;
-    min-width: 400px;  
-    min-height: 400px;
-    display: block;
+.chart-container {
+  width: 100%;
+  min-width: 0;
+  min-height: 400px;
+  display: block;
 }
 
-
-.chart-container svg text {
-  fill: gold !important;
-  margin-left: 100px;
-}
-
-
+.chart-container svg text,
 .chart-container svg text.title {
-  fill: #ffffff !important; 
+  fill: #38312a !important;
 }
-
-
- 

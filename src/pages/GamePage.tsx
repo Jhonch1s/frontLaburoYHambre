@@ -328,13 +328,13 @@ export const GamePage: React.FC = () => {
 
   return (
     <div className="game-container">
-      {/* HUD SUPERIOR CON MARCO HORIZONTAL */}
-      <header className="game-hud">
+      {/* HUD SUPERIOR CON PAPEL RASGADO */}
+      <header className="menu-header game-hud">
         <div className="hud-brand">
-          <button className="btn-menu-hud" onClick={() => navigate('/menu')}>
+          <button className="btn-header" onClick={() => navigate('/menu')}>
             Menú
           </button>
-          <img src={logoLaburoYHambre} alt="LaburoYHambre" className="hud-logo-img" />
+          <img src={logoLaburoYHambre} alt="LaburoYHambre" className="menu-logo-img" />
         </div>
 
         <div className="hud-metrics-frame">

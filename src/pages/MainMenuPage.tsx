@@ -60,7 +60,7 @@ export const MainMenuPage: React.FC = () => {
         <div className="user-welcome">
           <span>Bienvenido, <strong>{user?.username || 'Desarrollador'}</strong></span>
         </div>
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
+        <div className="menu-header-actions">
           <button className="btn-header" onClick={() => setShowHistorial(true)}>
             Ver Historial
           </button>
@@ -78,51 +78,50 @@ export const MainMenuPage: React.FC = () => {
           <div className="menu-spinner">Cargando estado del juego...</div>
         ) : (
           <div className="menu-cards-grid">
-            {/* 1. Continuar Carrera */}
-            <div className={`menu-card-frame ${!activeRun ? 'disabled' : ''}`}>
-              <div className="card-badge"></div>
-              <h2 className="h2-inicio">Continuar Carrera</h2>
-              {activeRun ? (
-                <div className="card-preview">
-                  <p><strong>Edad Actual:</strong> {activeRun.edadActual} años</p>
-                  <p><strong>Dinero Generado:</strong> ${activeRun.dineroGenerado.toLocaleString()}</p>
-                  <p><strong>Trabajo:</strong> {activeRun.trabajoActual?.puesto || 'Desempleado / Freelance'}</p>
-                </div>
-              ) : (
-                <p className="card-empty">No hay ninguna carrera activa guardada actualmente.</p>
-              )}
-              <button
-                className="btn-pal-inicio"
-                disabled={!activeRun}
-                onClick={handleContinueGame}
-              >
-                <h3 className='h3-inicio'><strong>Continuar Carrera</strong></h3>
-              </button>
-            </div>
+            <article className={`menu-card-frame menu-card-career ${!activeRun ? 'disabled' : ''}`}>
+              <div className="menu-note-content">
+                <span className="card-badge">01 / TU HISTORIA</span>
+                <h2 className="h2-inicio">Continuar<br />carrera</h2>
+                {activeRun ? (
+                  <div className="card-preview">
+                    <p><strong>Edad</strong><span>{activeRun.edadActual} años</span></p>
+                    <p><strong>Dinero</strong><span>${activeRun.dineroGenerado.toLocaleString()}</span></p>
+                    <p><strong>Trabajo</strong><span>{activeRun.trabajoActual?.puesto || 'Sin empleo'}</span></p>
+                  </div>
+                ) : (
+                  <p className="card-empty">Todavía no hay una carrera guardada.</p>
+                )}
+                <button className="btn-pal-inicio" disabled={!activeRun} onClick={handleContinueGame}>
+                  <span>{activeRun ? 'Seguir jugando' : 'Sin partida'}</span><span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </article>
 
-            {/* 2. Nueva Partida */}
-            <div className="menu-card-frame">
-              <div className="card-badge"></div>
-              <h2 className="h2-inicio">Nueva Partida</h2>
-              <p className="card-description">
-                Comienza una carrera profesional desde los 18 años. Toma decisiones clave, postúlate a empleos y llega al éxito financiero antes de la jubilación.
-              </p>
-              <button className="btn-pal-inicio" onClick={handleStartNewGame}>
-                <h3 className='h3-inicio'><strong>Iniciar Nueva Carrera</strong></h3>
-              </button>
-            </div>
+            <article className="menu-card-frame menu-card-new">
+              <div className="menu-note-content">
+                <span className="card-badge">02 / BORRÓN Y CUENTA NUEVA</span>
+                <h2 className="h2-inicio">Nueva<br />partida</h2>
+                <p className="card-description">
+                  Empezá a los 18. Buscá trabajo, tomá decisiones y tratá de llegar a fin de mes.
+                </p>
+                <button className="btn-pal-inicio" onClick={handleStartNewGame}>
+                  <span>Empezar de cero</span><span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </article>
 
-            {/* 3. Ranking Global */}
-            <div className="menu-card-frame">
-              <div className="card-badge"></div>
-              <h2 className="h2-inicio">Ranking Global</h2>
-              <p className="card-description">
-                Consulta los mejores desarrolladores que lograron mayor fortuna al jubilarse a los 65 años.
-              </p>
-              <button className="btn-pal-inicio" onClick={() => setShowRanking(true)}>
-                <h3 className='h3-inicio'><strong>Ver Ranking</strong></h3>
-              </button>
-            </div>
+            <article className="menu-card-frame menu-card-ranking">
+              <div className="menu-note-content">
+                <span className="card-badge">03 / LOS QUE LLEGARON</span>
+                <h2 className="h2-inicio">Ranking<br />global</h2>
+                <p className="card-description">
+                  Mirá quién llegó a los 65 con la billetera más llena.
+                </p>
+                <button className="btn-pal-inicio" onClick={() => setShowRanking(true)}>
+                  <span>Ver el ranking</span><span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </article>
           </div>
         )}
       </main>

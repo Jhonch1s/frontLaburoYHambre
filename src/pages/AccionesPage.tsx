@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useMemo} from 'react';
+import React, { useEffect, useState } from 'react';
 import { CrecimientoChart } from '../components/CrecimientoChart';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -8,8 +8,6 @@ import { PlayerAvatar } from '../components/PlayerAvatar';
 import { Footer } from '../components/Footer';
 import {
     logoLaburoYHambre,
-    botonSiguienteAno,
-    flechaIcon,
     backendSticker,
     frontendSticker,
     inglesSticker,
@@ -38,18 +36,13 @@ export const AccionesPage: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [oldRun, setOldRun] = useState<RunTrabajo | null>(null);
     const [habilidades, setHabilidades] = useState<Habilidad[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [showRanking, setShowRanking] = useState<boolean>(false);
-    const [showHistorial, setShowHistorial] = useState<boolean>(false);
 
     useEffect(() => {
         if (!id || !user?.id) return;
 
-        setLoading(true);
         getDetallePartida(id)
             .then(setOldRun)
             .catch(err => console.error('Error cargando detalle:', err))
-            .finally(() => setLoading(false));
 
         getHabilidades(id)
             .then((habs) => setHabilidades([...habs]))
@@ -84,7 +77,7 @@ export const AccionesPage: React.FC = () => {
                 <div className="user-welcome">
                     <span>Bienvenido, <strong>{user?.username || 'Desarrollador'}</strong></span>
                 </div>
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div className="menu-header-actions">
                     <button className="btn-header" onClick={() => navigate('/menu')}>
                         Regresar a menu
                     </button>
@@ -100,7 +93,7 @@ export const AccionesPage: React.FC = () => {
             <div className="game-body-layout">
                 <aside className='game-left-column'>
                     <div className='retrato-jugador' style={{ marginTop: 15 }}>
-                        <PlayerAvatar edadActual={Number(oldRun?.edadActual)} dineroGenerado={Number(oldRun?.dineroGenerado)} estaMuerto={Number(oldRun?.edadActual) < 65} />
+                        <PlayerAvatar edadActual={Number(oldRun?.edadActual)} dineroGenerado={Number(oldRun?.dineroGenerado)} estaMuerto={Boolean(oldRun?.muerto || oldRun?.estado === 'MUERTO')} />
                     </div>
 
                     <div className="job-card-frame">
@@ -113,7 +106,7 @@ export const AccionesPage: React.FC = () => {
                                 <p className="job-title">{oldRun.trabajoActual.puesto}</p>
                                 <p className="job-company">{oldRun.trabajoActual.tier ? `• Tier ${oldRun.trabajoActual.tier}` : ''}</p>
                                 <div className="job-salary-badge">
-                                    Salario Anual: <strong>{oldRun.edadActual < 65 ? "esta muerto lol" : "xddd"}</strong> / año
+                                    Salario Anual: <strong>${(oldRun.salarioActual || oldRun.trabajoActual.salarioAnual || 0).toLocaleString()}</strong> / año
                                 </div>
                             </div>
                         ) : (
