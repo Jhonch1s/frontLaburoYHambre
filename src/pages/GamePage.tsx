@@ -392,6 +392,21 @@ export const GamePage: React.FC = () => {
             )}
           </div>
 
+          {/* La ilustración funciona como un único botón accesible. */}
+          <div className="btn-advance-year-container">
+            <button
+              type="button"
+              className="btn-advance-year"
+              onClick={handleAvanzarAño}
+              disabled={advancing || Boolean(currentEvento)}
+            >
+              <img src={botonSiguienteAno} alt="" aria-hidden="true" />
+              <span className="btn-advance-year-label">
+                {advancing ? 'AVANZANDO...' : isFinishedRun ? 'MENÚ' : 'AVANZAR AÑO'}
+              </span>
+            </button>
+          </div>
+
           {/* Lista Habilidades en Acordeón Desplegable con Marco de Habilidades y Sticker Flecha */}
           <div className="skills-card-frame">
             <div
@@ -435,22 +450,6 @@ export const GamePage: React.FC = () => {
             )}
           </div>
 
-          {/* Botón Principal Avanzar Año Usando Boton Siguiente Año Frame Overlay */}
-          <div className="btn-advance-year-container">
-            <img
-              src={botonSiguienteAno}
-              alt="Boton Avanzar Año"
-              className={`btn-advance-year-img ${advancing ? 'disabled' : ''}  ${currentEvento ? 'disabled' : ''}  `  }
-              onClick={handleAvanzarAño}
-            />
-            <div className="btn-advance-text-overlay" onClick={handleAvanzarAño}>
-              {advancing
-                ? 'AVANZANDO AÑO...'
-                : isFinishedRun
-                ? 'MENÚ'
-                : 'AVANZA AÑO'}
-            </div>
-          </div>
         </aside>
 
         {/* COLUMNA DERECHA: HISTORIAL CON PAGINACIÓN DE 10 EN 10 Y TEXTURA LIBRETA */}

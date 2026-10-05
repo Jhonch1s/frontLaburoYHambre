@@ -351,49 +351,78 @@
   transition: width 0.3s ease;
 }
 
-/* BOTON AVANZA AÑO FLOTANTE EN ESQUINA INFERIOR DERECHA */
+/* Botón ilustrado entre el estado laboral y el cuaderno. */
 .btn-advance-year-container {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  z-index: 1000;
-  width: 240px;
-  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.7));
-  transition: transform 0.2s ease, filter 0.2s ease;
+  position: relative;
+  z-index: 2;
+  align-self: center;
+  width: min(80%, 280px);
+  margin-block: -0.8rem -0.6rem;
 }
 
-.btn-advance-year-img {
+.btn-advance-year {
+  position: relative;
+  width: 100%;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #171916;
+  cursor: pointer;
+  transform: rotate(-2deg);
+  filter: drop-shadow(0 7px 7px rgba(0, 0, 0, 0.55));
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.btn-advance-year img {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
-  box-shadow: none !important;
+  pointer-events: none;
 }
 
-.btn-advance-year-img:hover:not(.disabled) {
-  transform: translateY(-2px) scale(1.02);
-  filter: brightness(1.1);
-}
-
-.btn-advance-year-img.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.btn-advance-text-overlay {
+.btn-advance-year-label {
   position: absolute;
-  inset: 0;
+  inset: 0 29% 0 7%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  font-family: var(--font-heading);
-  font-weight: 800;
-  font-size: 1.25rem;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9), 0 0 14px rgba(59, 130, 246, 0.9);
-  cursor: pointer;
+  font-family: 'Kalam', var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.05rem, 2.3vw, 1.4rem);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  text-shadow: 0 1px 0 rgba(255, 248, 177, 0.8);
+  pointer-events: none;
+}
+
+.btn-advance-year:hover:not(:disabled) {
+  transform: translateY(-4px) rotate(0deg) scale(1.035);
+  filter: drop-shadow(0 11px 10px rgba(0, 0, 0, 0.55)) brightness(1.06);
+}
+
+.btn-advance-year:active:not(:disabled) {
+  transform: translateY(2px) rotate(0deg) scale(0.98);
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.45));
+}
+
+.btn-advance-year:focus-visible {
+  outline: 3px solid #fff4a3;
+  outline-offset: 3px;
+  border-radius: 1rem;
+}
+
+.btn-advance-year:disabled {
+  opacity: 0.58;
+  cursor: not-allowed;
+  filter: grayscale(0.35) drop-shadow(0 3px 4px rgba(0, 0, 0, 0.4));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-advance-year {
+    transition: none;
+  }
 }
 
 /* --- COLUMNA DERECHA: HISTORIAL LIBRETA --- */
