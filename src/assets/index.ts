@@ -11,6 +11,7 @@ import opcion1EventoMarco from './dieños .net/opcion 1 evento marco.png';
 // Assets de Íconos y Stickers (.net)
 import cloudInfraSticker from './iconos .net/cloud_infra logo stiker.png';
 import fantasmaSticker from './iconos .net/fantasma stiker.png';
+import flechaIcon from './iconos .net/flecha.png';
 import frontendSticker from './iconos .net/frontend stiker logo.png';
 import googleSticker from './iconos .net/google stiker.png';
 import backendSticker from './iconos .net/habilidad backend logo stiker.png';
@@ -47,6 +48,7 @@ export {
   // Íconos & Stickers
   cloudInfraSticker,
   fantasmaSticker,
+  flechaIcon,
   frontendSticker,
   googleSticker,
   backendSticker,
