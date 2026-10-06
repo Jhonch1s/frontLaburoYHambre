@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(rgba(9, 16, 30, 0.8), rgba(9, 16, 30, 0.9)), url('../assets/dieños .net/fondo mas lindo.png') center/cover no-repeat fixed;
+  background: linear-gradient(rgba(9, 16, 30, 0.8), rgba(9, 16, 30, 0.9)), url('../assets/dieños .net/fondo mas lindo.webp') center/cover no-repeat fixed;
 }
 
 .menu-header {
@@ -15,7 +15,7 @@
   background-color: #1b1b1d;
   background-image:
     linear-gradient(to bottom, rgba(18, 19, 22, 0.82) 0%, rgba(22, 22, 24, 0.84) 65%, rgba(10, 11, 13, 0.9) 100%),
-    url('../assets/menu-note.png');
+    url('../assets/menu-note.webp');
   background-position: center, center 50%;
   background-size: 100% 100%, 135% auto;
   background-repeat: no-repeat;
@@ -74,7 +74,7 @@
   padding: 0.35rem 0.7rem;
   border: 0;
   border-radius: 0;
-  background: url('../assets/menu-button-strip.png') center / 110% auto no-repeat;
+  background: url('../assets/menu-button-strip.webp') center / 110% auto no-repeat;
   color: #fff4df;
   font-family: 'Outfit', sans-serif;
   font-size: 0.82rem;
@@ -129,7 +129,7 @@
   position: relative;
   width: 100%;
   aspect-ratio: 0.8;
-  background: url('../assets/menu-note.png') center / 118% 112% no-repeat;
+  background: url('../assets/menu-note.webp') center / 118% 112% no-repeat;
   color: #262526;
   filter: drop-shadow(0 15px 13px rgba(0, 0, 0, 0.48));
   transform: rotate(var(--note-rotation));
@@ -234,7 +234,7 @@
   margin-top: auto;
   padding: 0.5rem 1rem;
   border: 0;
-  background: url('../assets/menu-button-strip.png') center / 110% auto no-repeat;
+  background: url('../assets/menu-button-strip.webp') center / 110% auto no-repeat;
   color: #fff4df;
   font-family: 'Outfit', sans-serif;
   font-size: clamp(0.76rem, 1.05vw, 0.94rem);

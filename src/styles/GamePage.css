@@ -3,7 +3,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('../assets/dieños .net/fondo mas lindo.png') center/cover no-repeat fixed;
+  background: linear-gradient(rgba(15, 23, 42, 0.88), rgba(15, 23, 42, 0.94)), url('../assets/dieños .net/fondo mas lindo.webp') center/cover no-repeat fixed;
 }
 
 /* El HUD reutiliza el papel rasgado y los botones del menú. */
@@ -115,7 +115,7 @@
 
 /* Perfil sobre sticker de papel */
 .player-avatar-frame-card {
-  background: url('../assets/profile-sticker.png') center/100% 100% no-repeat;
+  background: url('../assets/profile-sticker.webp') center/100% 100% no-repeat;
   border: none;
   border-radius: 0;
   padding: 1rem 1.35rem;
@@ -179,7 +179,7 @@
 
 /* Estado laboral sobre hoja de papel */
 .job-card-frame {
-  background: url('../assets/job-paper.png') center/100% 100% no-repeat;
+  background: url('../assets/job-paper.webp') center/100% 100% no-repeat;
   border: none;
   border-radius: 0;
   padding: 1.35rem 1.55rem;
@@ -262,7 +262,7 @@
 
 /* Habilidades sobre la tapa de un cuaderno cerrado */
 .skills-card-frame {
-  background: url('../assets/skills-notebook.png') center/100% 100% no-repeat;
+  background: url('../assets/skills-notebook.webp') center/100% 100% no-repeat;
   border: none;
   border-radius: 0;
   padding: 2.2rem 1.6rem 2rem 4.3rem;
@@ -438,7 +438,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background: url('../assets/career-history-sheet.png') center top/100% 100% no-repeat;
+  background: url('../assets/career-history-sheet.webp') center top/100% 100% no-repeat;
   border: none;
   border-radius: 0;
   padding: clamp(4.5rem, 8vw, 7rem) clamp(1.3rem, 3vw, 3rem) 4rem 16%;
@@ -566,7 +566,7 @@
 }
 
 .btn-pagination-azul {
-  background: url('../assets/cinta-azul.png') center/100% 100% no-repeat !important;
+  background: url('../assets/cinta-azul.webp') center/100% 100% no-repeat !important;
   border: none !important;
   box-shadow: none !important;
   color: #ffffff !important;

@@ -1,6 +1,6 @@
 /* --- EVENT MODAL STYLES --- */
 .event-modal-card-frame {
-  background: url('../assets/dieños .net/fondo modal evento.png') center/100% 100% no-repeat;
+  background: url('../assets/dieños .net/fondo modal evento.webp') center/100% 100% no-repeat;
   border-radius: var(--radius-lg);
   max-width: 660px;
   width: 100%;
@@ -98,11 +98,11 @@
 }
 
 .event-option-button.option-frame-1 {
-  background: url('../assets/dieños .net/opcion 1 evento marco.png') center/100% 100% no-repeat;
+  background: url('../assets/dieños .net/opcion 1 evento marco.webp') center/100% 100% no-repeat;
 }
 
 .event-option-button.option-frame-2 {
-  background: url('../assets/dieños .net/marco opcion 2 evento.png') center/100% 100% no-repeat;
+  background: url('../assets/dieños .net/marco opcion 2 evento.webp') center/100% 100% no-repeat;
 }
 
 .event-option-button:hover {

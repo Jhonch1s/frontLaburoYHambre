@@ -5,7 +5,7 @@
   max-height: 90vh;
   overflow-y: auto;
   border-radius: var(--radius-lg);
-  background: url('../assets/modal .net/modal ranking (1).png') center/100% 100% no-repeat;
+  background: url('../assets/modal .net/modal ranking (1).webp') center/100% 100% no-repeat;
   border: none;
   padding-left: 6rem;
   padding-right: 6rem;
@@ -14,7 +14,7 @@
 }
 
 .ranking-modal-card.jubilacion-frame {
-  background: url('../assets/modal .net/modal jubilacion resultado.png') center/100% 100% no-repeat;
+  background: url('../assets/modal .net/modal jubilacion resultado.webp') center/100% 100% no-repeat;
   width: min(94vw, 1000px);
   max-width: none;
   aspect-ratio: 1.46 / 1;
@@ -26,7 +26,7 @@
 }
 
 .ranking-modal-card.muerte-frame {
-  background: url('../assets/modal .net/modal resultado muerte.png') center/100% 100% no-repeat;
+  background: url('../assets/modal .net/modal resultado muerte.webp') center/100% 100% no-repeat;
   width: min(94vw, 1000px);
   max-width: none;
   aspect-ratio: 1.71 / 1;
@@ -280,7 +280,7 @@
 
 /* BOTON COMPACTO ROJO PARA EL MODAL DE RANKING */
 .btn-ranking-close {
-  background: url('../assets/botones .net/boton rojo.png') center/100% 100% no-repeat !important;
+  background: url('../assets/botones .net/boton rojo.webp') center/100% 100% no-repeat !important;
   border: none !important;
   box-shadow: none !important;
   color: #ffffff !important;

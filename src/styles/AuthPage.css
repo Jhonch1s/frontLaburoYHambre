@@ -9,7 +9,7 @@
   padding: 0;
   background:
     linear-gradient(rgba(9, 15, 29, 0.76), rgba(9, 15, 29, 0.84)),
-    url('../assets/dieños .net/fondo mas lindo.png') center/cover no-repeat fixed;
+    url('../assets/dieños .net/fondo mas lindo.webp') center/cover no-repeat fixed;
 }
 
 .auth-card-wrapper {
@@ -27,7 +27,7 @@
   justify-content: center;
   width: min(100%, 620px, calc((100svh - 7.5rem) * 0.8346));
   aspect-ratio: 2003 / 2400;
-  background: url('../assets/notebook-login.png') center/100% 100% no-repeat;
+  background: url('../assets/notebook-login.webp') center/100% 100% no-repeat;
   border: none;
   border-radius: 0;
   padding: clamp(2rem, 4vw, 3.25rem) 0 clamp(2.3rem, 5.5vw, 4.3rem);

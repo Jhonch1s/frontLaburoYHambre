@@ -1,41 +1,41 @@
 // Assets de Diseños (.net)
-import botonSiguienteAno from './dieños .net/boton siguiente año.png';
-import fondoModalEvento from './dieños .net/fondo modal evento.png';
-import fondoPizarraLindo from './dieños .net/fondo mas lindo.png';
-import logoLaburoYHambre from './dieños .net/logo LaburoYHambre.png';
-import marcoOpcion2Evento from './dieños .net/marco opcion 2 evento.png';
-import opcion1EventoMarco from './dieños .net/opcion 1 evento marco.png';
+import botonSiguienteAno from './dieños .net/boton siguiente año.webp';
+import fondoModalEvento from './dieños .net/fondo modal evento.webp';
+import fondoPizarraLindo from './dieños .net/fondo mas lindo.webp';
+import logoLaburoYHambre from './dieños .net/logo LaburoYHambre.webp';
+import marcoOpcion2Evento from './dieños .net/marco opcion 2 evento.webp';
+import opcion1EventoMarco from './dieños .net/opcion 1 evento marco.webp';
 
 // Assets de Botones (.net)
 
 // Assets de Íconos y Stickers (.net)
-import cloudInfraSticker from './iconos .net/cloud_infra logo stiker.png';
-import fantasmaSticker from './iconos .net/fantasma stiker.png';
-import flechaIcon from './iconos .net/flecha.png';
-import frontendSticker from './iconos .net/frontend stiker logo.png';
-import googleSticker from './iconos .net/google stiker.png';
-import backendSticker from './iconos .net/habilidad backend logo stiker.png';
-import inglesSticker from './iconos .net/habilidad ingles stiker.png';
-import liderazgoSticker from './iconos .net/liderazgo logo stiker.png';
-import primerPuestoSticker from './iconos .net/primer puesti stiker.png';
-import segundoPuestoSticker from './iconos .net/puesto 2 ranking medalla stiker.png';
-import despidoSticker from './iconos .net/stiker de cartel de despido.png';
-import globantSticker from './iconos .net/stiker globant.png';
-import mercadoLibreSticker from './iconos .net/stiker mercado libre.png';
-import startupSticker from './iconos .net/stiker startup innovadora.png';
-import tercerPuestoSticker from './iconos .net/tercer puesto stiker.png';
+import cloudInfraSticker from './iconos .net/cloud_infra logo stiker.webp';
+import fantasmaSticker from './iconos .net/fantasma stiker.webp';
+import flechaIcon from './iconos .net/flecha.webp';
+import frontendSticker from './iconos .net/frontend stiker logo.webp';
+import googleSticker from './iconos .net/google stiker.webp';
+import backendSticker from './iconos .net/habilidad backend logo stiker.webp';
+import inglesSticker from './iconos .net/habilidad ingles stiker.webp';
+import liderazgoSticker from './iconos .net/liderazgo logo stiker.webp';
+import primerPuestoSticker from './iconos .net/primer puesti stiker.webp';
+import segundoPuestoSticker from './iconos .net/puesto 2 ranking medalla stiker.webp';
+import despidoSticker from './iconos .net/stiker de cartel de despido.webp';
+import globantSticker from './iconos .net/stiker globant.webp';
+import mercadoLibreSticker from './iconos .net/stiker mercado libre.webp';
+import startupSticker from './iconos .net/stiker startup innovadora.webp';
+import tercerPuestoSticker from './iconos .net/tercer puesto stiker.webp';
 
 // Assets de Personajes (.net)
-import jovenPobre from './personaje .net/joven y pobre.png';
-import jovenModerado from './personaje .net/joven plata moderada.png';
-import jovenRico from './personaje .net/rico y joven.png';
-import adultoPobre from './personaje .net/adulto y pobre.png';
-import adultoModerado from './personaje .net/adulto plata moderada.png';
-import adultoRico from './personaje .net/adulto rico.png';
-import viejoPobre from './personaje .net/pobre viejo.png';
-import viejoModerado from './personaje .net/viejo plata moderada.png';
-import viejoRico from './personaje .net/viejo rico.png';
-import muerto from './personaje .net/muerto.png';
+import jovenPobre from './personaje .net/joven y pobre.webp';
+import jovenModerado from './personaje .net/joven plata moderada.webp';
+import jovenRico from './personaje .net/rico y joven.webp';
+import adultoPobre from './personaje .net/adulto y pobre.webp';
+import adultoModerado from './personaje .net/adulto plata moderada.webp';
+import adultoRico from './personaje .net/adulto rico.webp';
+import viejoPobre from './personaje .net/pobre viejo.webp';
+import viejoModerado from './personaje .net/viejo plata moderada.webp';
+import viejoRico from './personaje .net/viejo rico.webp';
+import muerto from './personaje .net/muerto.webp';
 
 export {
   // Diseños
