@@ -25,26 +25,46 @@ export const CrecimientoChart = ({ chartData }: CrecimientoChartProps) => {
 
     container.innerHTML = '';
 
-    new roughViz.Line({
-      element: `#${containerId}`,
-      data: { patrimonio },
-      x: years,
-      title: 'Crecimiento de tu Patrimonio',
-      xLabel: 'Año',
-      yLabel: 'Patrimonio (USD)',
-      yValueFormat: ',.2s',
-      colors: ['#087f8c'],
-      roughness: 0.35,
-      strokeWidth: 2.5,
-      circleRadius: 4,
-      legend: false,
-      axisFontSize: '0.78rem',
-      labelFontSize: '0.9rem',
-      titleFontSize: '18px',
-      margin: { top: 54, right: 28, bottom: 82, left: 88 },
-    });
+    // rough-viz registers an anonymous window resize listener and has no
+    // lifecycle cleanup for it. Capture that listener so it can be removed
+    // when this chart unmounts or its data changes.
+    const resizeListeners: EventListenerOrEventListenerObject[] = [];
+    const originalAddEventListener = window.addEventListener;
+    const captureAddEventListener = (
+      type: string,
+      listener: EventListenerOrEventListenerObject | null,
+      options?: boolean | AddEventListenerOptions,
+    ) => {
+      if (type === 'resize' && listener) resizeListeners.push(listener);
+      return originalAddEventListener.call(window, type, listener as EventListener, options);
+    };
+
+    window.addEventListener = captureAddEventListener as typeof window.addEventListener;
+    try {
+      new roughViz.Line({
+        element: `#${containerId}`,
+        data: { patrimonio },
+        x: years,
+        title: 'Crecimiento de tu Patrimonio',
+        xLabel: 'Año',
+        yLabel: 'Patrimonio (USD)',
+        yValueFormat: ',.2s',
+        colors: ['#087f8c'],
+        roughness: 0.35,
+        strokeWidth: 2.5,
+        circleRadius: 4,
+        legend: false,
+        axisFontSize: '0.78rem',
+        labelFontSize: '0.9rem',
+        titleFontSize: '18px',
+        margin: { top: 54, right: 28, bottom: 82, left: 88 },
+      });
+    } finally {
+      window.addEventListener = originalAddEventListener;
+    }
 
     return () => {
+      resizeListeners.forEach((listener) => window.removeEventListener('resize', listener));
       container.innerHTML = '';
     };
   }, [containerId, patrimonio, years]);
