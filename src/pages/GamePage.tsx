@@ -55,6 +55,7 @@ export const GamePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 10;
 
+
   // Helper sticker para cada habilidad
   const getSkillSticker = (name: string) => {
     const lower = name.toLowerCase();
