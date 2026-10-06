@@ -162,11 +162,13 @@ export const RankingModal: React.FC<RankingModalProps> = ({
             
           </>
         )}
-        <div className="ranking-modal-actions">
-              <button className="btn-ranking-close" onClick={onClose}>
-                {isJubilacion || esMuerto ? 'Volver al Menú Principal' : 'Cerrar Ranking'}
-              </button>
-            </div>
+        {!esResultado && (
+          <div className="ranking-modal-actions">
+            <button className="btn-ranking-close" onClick={onClose}>
+              Cerrar Ranking
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

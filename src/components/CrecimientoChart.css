@@ -1,11 +1,39 @@
 .chart-container {
   width: 100%;
   min-width: 0;
-  min-height: 400px;
+  min-height: 500px;
   display: block;
+  padding: 0.75rem;
+  border: 1px solid rgba(120, 89, 52, 0.16);
+  border-radius: 14px;
+  background: rgba(255, 250, 240, 0.22);
+  box-sizing: border-box;
+  filter: drop-shadow(0 5px 7px rgba(76, 52, 29, 0.1));
 }
 
 .chart-container svg text,
 .chart-container svg text.title {
   fill: #38312a !important;
+}
+
+.chart-container svg .labelText {
+  fill: #514333 !important;
+  font-weight: 700;
+}
+
+.chart-empty-state {
+  min-height: 300px;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+  color: #62513e;
+  font-weight: 700;
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .chart-container {
+    min-height: 380px;
+    padding: 0.25rem;
+  }
 }
