@@ -116,6 +116,12 @@ export const RankingModal: React.FC<RankingModalProps> = ({
                 </div>
               </div>
             )}
+
+            <div className="ranking-modal-actions result-modal-actions">
+              <button className="btn-ranking-close result-modal-close" onClick={onClose}>
+                Volver al menú
+              </button>
+            </div>
           </div>
         ) : (
           /* CLASIFICACIÓN GENERAL GLOBAL (DESDE EL MENÚ PRINCIPAL) */

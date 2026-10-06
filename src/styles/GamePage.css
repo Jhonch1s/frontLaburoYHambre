@@ -589,6 +589,7 @@
 
 .btn-pagination-azul:disabled {
   opacity: 0.45;
+  filter: saturate(0);
   cursor: not-allowed;
 }
 
