@@ -141,10 +141,10 @@ export async function aumentarAño(userId: string, runId?: string): Promise<RunT
   if (IS_DESIGN_PREVIEW) return advancePreviewRun();
   try {
     if (runId) {
-      await api.patch(`/runTrabajo/aumentarAnio/${runId}/${userId}`).catch(() => {});
+      await api.patch(`/runTrabajo/aumentarAnio/${runId}/${userId}`).catch(() => { });
     }
-    await api.patch(`/runTrabajo/aumentarEdad/${userId}`).catch(() => {});
-    await api.patch(`/runTrabajo/aumentarDinero/${userId}`).catch(() => {});
+    await api.patch(`/runTrabajo/aumentarEdad/${userId}`).catch(() => { });
+    await api.patch(`/runTrabajo/aumentarDinero/${userId}`).catch(() => { });
   } catch (err) {
     console.warn('Advertencia al avanzar año en backend:', err);
   }
@@ -223,8 +223,23 @@ export async function evaluarEvento(runId?: string, currentRun?: RunTrabajo | nu
         })),
       };
     }
-  } catch (err) {
-    console.warn('Error evaluando evento en backend:', err);
+  } catch (err: any) {
+    console.group('Error en evaluarEvento');
+    console.warn('Mensaje de error:', err.message);
+
+    if (err.response) {
+      // El servidor respondió con un status fuera del rango 2xx (404, 500, etc.)
+      console.warn('Código HTTP (Status):', err.response.status);
+      console.warn('Respuesta del servidor (Data):', err.response.data);
+    } else if (err.request) {
+      // La petición se hizo pero no se recibió respuesta (red/CORS)
+      console.warn('Sin respuesta del servidor. Request:', err.request);
+    } else {
+      // Error en código JS/TS antes o después de la petición
+      console.warn('Error de JS/sintaxis:', err);
+    }
+
+    console.groupEnd();
   }
   return null;
 }
@@ -265,7 +280,7 @@ export async function getRankingGlobal(): Promise<any[]> {
   return [];
 }
 
-export async function getPartidasAnteriores(idUsuario: string): Promise<any[]>{
+export async function getPartidasAnteriores(idUsuario: string): Promise<any[]> {
   if (IS_DESIGN_PREVIEW) {
     return [{
       id: getPreviewRun().id,
@@ -286,23 +301,23 @@ export async function getPartidasAnteriores(idUsuario: string): Promise<any[]>{
       ? [raw]
       : [];
 
-    return list.map((item: any, idx: number) => {
-      const userObj = typeof item.user === 'object' ? item.user: {};
-      return {
-        id: getId(item) || `rank-${idx}`,
-        username: userObj.username || item.usuario,
-        fecha: item.fecha,
-        edadActual: item.edadActual || 65,
-        dineroGenerado: typeof item.dineroGenerado === 'number' ? item.dineroGenerado : 0,
-        estado : item.estado || 'Completada'
-      };
-    });
+  return list.map((item: any, idx: number) => {
+    const userObj = typeof item.user === 'object' ? item.user : {};
+    return {
+      id: getId(item) || `rank-${idx}`,
+      username: userObj.username || item.usuario,
+      fecha: item.fecha,
+      edadActual: item.edadActual || 65,
+      dineroGenerado: typeof item.dineroGenerado === 'number' ? item.dineroGenerado : 0,
+      estado: item.estado || 'Completada'
+    };
+  });
 
   return [];
 }
 
 
-export async function getDetallePartida(idRunTrabajo: string): Promise<RunTrabajo>{
+export async function getDetallePartida(idRunTrabajo: string): Promise<RunTrabajo> {
   if (IS_DESIGN_PREVIEW) return getPreviewRun();
   const res = await api.get(`/runTrabajo/obtenerRunTrabajoDetalle/${idRunTrabajo}`);
   console.log(idRunTrabajo)
