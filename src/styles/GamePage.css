@@ -566,7 +566,7 @@
 }
 
 .btn-pagination-azul {
-  background: url('../assets/dieños .net/nota 2 azul.png') center/100% 100% no-repeat !important;
+  background: url('../assets/cinta-azul.png') center/100% 100% no-repeat !important;
   border: none !important;
   box-shadow: none !important;
   color: #ffffff !important;
@@ -574,7 +574,7 @@
   font-size: 0.95rem !important;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8) !important;
   padding: 0.6rem 1.6rem !important;
-  height: 44px !important;
+  height: 64px !important;
   min-width: 110px !important;
   display: inline-flex !important;
   align-items: center !important;
@@ -684,7 +684,7 @@
 
   .btn-pagination-azul {
     min-width: 86px !important;
-    height: 38px !important;
+    height: 52px !important;
     padding: 0.4rem 0.7rem !important;
     font-size: 0.8rem !important;
   }
