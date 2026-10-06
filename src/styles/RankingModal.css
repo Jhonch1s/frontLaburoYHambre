@@ -15,10 +15,26 @@
 
 .ranking-modal-card.jubilacion-frame {
   background: url('../assets/modal .net/modal jubilacion resultado.png') center/100% 100% no-repeat;
+  width: min(94vw, 1000px);
+  max-width: none;
+  aspect-ratio: 1.46 / 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .ranking-modal-card.muerte-frame {
   background: url('../assets/modal .net/modal resultado muerte.png') center/100% 100% no-repeat;
+  width: min(94vw, 1000px);
+  max-width: none;
+  aspect-ratio: 1.71 / 1;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
 
 .ranking-header {
@@ -38,39 +54,36 @@
 .result-modal-container {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding: 0.5rem 1rem;
-  padding-left: 6rem;
-  padding-right: 3rem;
+  gap: 1rem;
+  width: min(72%, 820px);
+  padding: 0;
 }
 
 .result-header-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
   align-items: center;
-  gap: 1.5rem;
-  padding: 1rem 1.2rem;
-  border-radius: var(--radius-md);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 1.25rem;
+  padding: 0;
 }
 
 .result-avatar-box {
-  flex-shrink: 0;
-  width: 90px;
-  height: 90px;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.result-avatar-box .player-avatar-frame-card {
+  width: 100%;
+  min-height: 0;
 }
 
 .result-main-details {
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  flex: 1;
-  width: 100.2px;
-  height: 100.833px;
-  margin-left: 150px;
-  margin-top: 120px;
+  min-width: 0;
 }
 
 .result-player-name {
@@ -79,14 +92,24 @@
   color: var(--text-main);
   font-family: var(--font-heading);
   text-shadow: 0 2px 6px rgba(0,0,0,0.8);
-  padding-top: 15px;
+  padding-top: 0;
 }
 
 .result-stat-line {
-  display: flex;
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
   align-items: center;
   gap: 0.6rem;
   font-size: 0.95rem;
+}
+
+.jubilacion-frame .result-player-name,
+.jubilacion-frame .result-stat-label,
+.jubilacion-frame .result-stat-money,
+.jubilacion-frame .result-stat-status,
+.jubilacion-frame .result-skills-title {
+  color: #3f2c18;
+  text-shadow: none;
 }
 
 .result-stat-label {
@@ -224,9 +247,21 @@
   margin-top: 1rem;
 }
 
+.result-modal-close {
+  min-width: 190px !important;
+}
+
+.result-modal-actions {
+  position: absolute;
+  top: 6%;
+  right: 12%;
+  z-index: 1;
+  margin: 0;
+}
+
 /* BOTON COMPACTO ROJO PARA EL MODAL DE RANKING */
 .btn-ranking-close {
-  background: url('../assets/botones .net/boton rojo pequeño.png') center/100% 100% no-repeat !important;
+  background: url('../assets/botones .net/boton rojo.png') center/100% 100% no-repeat !important;
   border: none !important;
   box-shadow: none !important;
   color: #ffffff !important;
@@ -247,4 +282,47 @@
 .btn-ranking-close:hover {
   transform: translateY(-2px) scale(1.03);
   filter: brightness(1.15);
+}
+
+@media (max-width: 700px) {
+  .ranking-modal-card.jubilacion-frame,
+  .ranking-modal-card.muerte-frame {
+    width: 94vw;
+    min-height: 82vh;
+    max-height: 90vh;
+    aspect-ratio: auto;
+    overflow-y: auto;
+  }
+
+  .result-modal-container {
+    width: 84%;
+    padding-block: 2rem;
+  }
+
+  .result-modal-actions {
+    top: 2%;
+    right: 4%;
+  }
+
+  .result-header-row {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .result-avatar-box .player-avatar-frame-card {
+    max-width: 440px;
+  }
+
+  .result-main-details {
+    padding-inline: 0.5rem;
+  }
+
+  .result-stat-line {
+    grid-template-columns: 1fr;
+    gap: 0.1rem;
+  }
+
+  .result-skills-grid {
+    justify-content: center;
+  }
 }

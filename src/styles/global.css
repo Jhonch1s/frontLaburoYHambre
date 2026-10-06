@@ -48,13 +48,13 @@ h1, h2, h3, h4, h5, h6 {
   cursor: pointer;
   border: none;
   font-family: var(--font-heading);
-  background: url('../assets/botones .net/boton azul.png') center/cover no-repeat;
+  background: url('../assets/botones .net/boton celeste.png') center/100% 100% no-repeat;
   color: #ffffff;
   text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
 .btn-header {
-  background: url('../assets/botones .net/boton verde.png') center/cover no-repeat;
+  background: url('../assets/botones .net/boton verde.png') center/100% 100% no-repeat;
   width: 280.717px;
   height: 87.2px;
   color: #ffffff;
@@ -80,8 +80,16 @@ h1, h2, h3, h4, h5, h6 {
   filter: grayscale(0.8);
 }
 
-.btn-primary, .btn-secondary, .btn-success, .btn-outline {
-  background: url('../assets/botones .net/boton azul.png') center/cover no-repeat;
+.btn-primary, .btn-secondary, .btn-outline {
+  background: url('../assets/botones .net/boton celeste.png') center/100% 100% no-repeat;
+  width: 342.717px;
+  height: 87.2px;
+  color: #ffffff;
+  border: none;
+}
+
+.btn-success {
+  background: url('../assets/botones .net/boton verde.png') center/100% 100% no-repeat;
   width: 342.717px;
   height: 87.2px;
   color: #ffffff;
