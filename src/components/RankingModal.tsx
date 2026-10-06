@@ -46,6 +46,7 @@ export const RankingModal: React.FC<RankingModalProps> = ({
       getRankingGlobal()
         .then((data) => {
           const normalized = data
+            .filter((item) => item && typeof item === 'object')
             .map((item, index) => ({
               id: item.id || `rank-${index}`,
               username: item.username || item.userId || `Jugador #${index + 1}`,
@@ -56,6 +57,10 @@ export const RankingModal: React.FC<RankingModalProps> = ({
             .sort((a, b) => b.dineroGenerado - a.dineroGenerado);
 
           setRanking(normalized);
+        })
+        .catch((err) => {
+          console.error('Error cargando posiciones globales:', err);
+          setRanking([]);
         })
         .finally(() => setLoading(false));
     }
@@ -146,14 +151,18 @@ export const RankingModal: React.FC<RankingModalProps> = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {ranking.map((item, index) => (
-                      <tr key={item.id} className={index < 3 ? 'top-rank' : ''}>
-                        <td className="rank-position">{getMedalSticker(index)}</td>
-                        <td className="rank-user">{item.username}</td>
-                        <td>{item.edadActual} años {item.estado === 'MUERTO' ? '(Fallecido)' : ''}</td>
-                        <td className="rank-money">${item.dineroGenerado.toLocaleString()}</td>
-                      </tr>
-                    ))}
+                    {ranking.length > 0 ? ranking.map((item, index) => (
+                        <tr key={item.id} className={index < 3 ? 'top-rank' : ''}>
+                          <td className="rank-position">{getMedalSticker(index)}</td>
+                          <td className="rank-user">{item.username}</td>
+                          <td>{item.edadActual} años {item.estado === 'MUERTO' ? '(Fallecido)' : ''}</td>
+                          <td className="rank-money">${item.dineroGenerado.toLocaleString()}</td>
+                        </tr>
+                      )) : (
+                        <tr>
+                          <td colSpan={4} className="ranking-empty-state">No hay posiciones disponibles.</td>
+                        </tr>
+                      )}
                   </tbody>
                 </table>
               </div>

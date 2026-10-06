@@ -232,6 +232,12 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+.ranking-empty-state {
+  padding: 2rem !important;
+  text-align: center;
+  color: var(--text-muted);
+}
+
 .ranking-table tr.top-rank {
   background: rgba(251, 191, 36, 0.1);
 }

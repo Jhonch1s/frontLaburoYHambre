@@ -266,16 +266,18 @@ export async function getRankingGlobal(): Promise<any[]> {
   if (IS_DESIGN_PREVIEW) return [...previewRanking];
   const res = await api.get('/ranking');
   if (res.data && Array.isArray(res.data)) {
-    return res.data.map((item: any, idx: number) => {
-      const userObj = typeof item.user === 'object' ? item.user : {};
-      return {
-        id: getId(item) || `rank-${idx}`,
-        username: userObj.username || item.usuario || `Jugador #${idx + 1}`,
-        dineroGenerado: typeof item.dineroGenerado === 'number' ? item.dineroGenerado : 0,
-        edadActual: item.edadActual || 65,
-        estado: item.estado || 'Completada',
-      };
-    });
+    return res.data
+      .filter((item: any) => item && typeof item === 'object')
+      .map((item: any, idx: number) => {
+        const userObj = item.user && typeof item.user === 'object' ? item.user : {};
+        return {
+          id: getId(item) || `rank-${idx}`,
+          username: userObj.username || item.usuario || item.username || `Jugador #${idx + 1}`,
+          dineroGenerado: typeof item.dineroGenerado === 'number' ? item.dineroGenerado : 0,
+          edadActual: item.edadActual || 65,
+          estado: item.estado || 'Completada',
+        };
+      });
   }
   return [];
 }
